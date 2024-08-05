@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: fastfood_cms
+  datasource:
+    url: ${DB_NAME}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      #      better use this ddl-auto: update than create-drop or create since it might be lost data
+      ddl-auto: update
+    show-sql: true
+  jwt:
+    secret: ${JWT_SECRET}
+    expire: 999999999999
+
+server:
+  port: ${PORT}
+  servlet:
+    context-path: /api/v1
