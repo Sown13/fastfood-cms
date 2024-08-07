@@ -1,7 +1,5 @@
-package com.ffc.ffc_be.config.security;
+package com.ffc.ffc_be.security;
 
-import com.ffc.ffc_be.service.security.JwtService;
-import com.ffc.ffc_be.service.security.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

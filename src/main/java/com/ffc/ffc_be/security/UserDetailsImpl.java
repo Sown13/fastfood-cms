@@ -1,10 +1,11 @@
-package com.ffc.ffc_be.config.security;
+package com.ffc.ffc_be.security;
 
 import com.ffc.ffc_be.model.entity.UserInfoModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -18,7 +19,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        String ROLE_PREFIX = "ROLE_";
+        return List.of(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRole()));
     }
 
     @Override

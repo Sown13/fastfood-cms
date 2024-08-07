@@ -1,6 +1,5 @@
-package com.ffc.ffc_be.service.security;
+package com.ffc.ffc_be.security;
 
-import com.ffc.ffc_be.config.security.UserDetailsImpl;
 import com.ffc.ffc_be.model.dto.request.LoginRequest;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
 import com.ffc.ffc_be.model.entity.UserInfoModel;
@@ -24,6 +23,7 @@ public class AuthenticationService {
         UserInfoModel user = UserInfoModel.builder()
                 .firstName(request.getFirstName())
                 .username(request.getUsername())
+                .role(request.getRole())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 

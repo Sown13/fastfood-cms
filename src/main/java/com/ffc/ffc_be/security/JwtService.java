@@ -1,4 +1,4 @@
-package com.ffc.ffc_be.service.security;
+package com.ffc.ffc_be.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,8 +26,9 @@ public class JwtService {
     @Value("${spring.jwt.secret}")
     private String jwtSecret;
 
-//    @Value("${spring.jwt.expire}")
-    private int jwtExpirationMs = 999999999;
+    private final long ONE_DAY = 86400000L;
+
+    private long jwtExpirationMs = ONE_DAY * 365;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -38,12 +39,15 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetailsImpl userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getUser().getRole());
+        claims.put("username", userDetails.getUsername());
+        return generateToken(claims, userDetails);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpirationMs);
+        return buildToken(extraClaims, userDetails, jwtExpirationMs * 4);
     }
 
     public long getExpirationTime() {
@@ -58,7 +62,6 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -1,6 +1,5 @@
-package com.ffc.ffc_be.service.security;
+package com.ffc.ffc_be.security;
 
-import com.ffc.ffc_be.config.security.UserDetailsImpl;
 import com.ffc.ffc_be.model.entity.UserInfoModel;
 import com.ffc.ffc_be.repository.IUserInfoRepository;
 import lombok.RequiredArgsConstructor;
