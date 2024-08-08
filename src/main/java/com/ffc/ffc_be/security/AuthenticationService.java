@@ -23,7 +23,7 @@ public class AuthenticationService {
         UserInfoModel user = UserInfoModel.builder()
                 .firstName(request.getFirstName())
                 .username(request.getUsername())
-                .role(request.getRole())
+                .role(request.getRole().toUpperCase())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
