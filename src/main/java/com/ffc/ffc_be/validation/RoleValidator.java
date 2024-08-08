@@ -28,7 +28,7 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
         }
 
         constraintValidatorContext.disableDefaultConstraintViolation();
-        constraintValidatorContext.buildConstraintViolationWithTemplate("You are not have permission for creating account with this ROLE").addConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate("You do not have permission for creating account with this ROLE").addConstraintViolation();
         return false;
     }
 

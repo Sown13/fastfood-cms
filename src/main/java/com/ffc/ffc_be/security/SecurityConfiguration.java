@@ -62,11 +62,6 @@ public class SecurityConfiguration {
 //                        .requestMatchers(BOSS_ENDPOINT).hasRole("BOSS"))
                 .authorizeHttpRequests(request -> request
                         .anyRequest().authenticated())
-                .exceptionHandling(
-                        e -> e.accessDeniedHandler(
-                                        (request, response, accessDeniedException) -> response.setStatus(403)
-                                )
-                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))) // return 401 status for better understanding
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
