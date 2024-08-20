@@ -1,6 +1,6 @@
 package com.ffc.ffc_be.security;
 
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-    UserInfoModel user;
+    UserCmsInfoModel user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

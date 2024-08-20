@@ -1,16 +1,16 @@
 package com.ffc.ffc_be.validation;
 
 import com.ffc.ffc_be.annotation.IsValidRole;
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.RoleEnum;
-import com.ffc.ffc_be.service.UserInfoService;
+import com.ffc.ffc_be.service.UserCmsInfoService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
-    private final UserInfoService userInfoService;
+    private final UserCmsInfoService userCmsInfoService;
 
     @Override
     public boolean isValid(String role, ConstraintValidatorContext constraintValidatorContext) {
@@ -20,7 +20,7 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
             return false;
         }
 
-        UserInfoModel userInfo = userInfoService.getUserInfoFromContext();
+        UserCmsInfoModel userInfo = userCmsInfoService.getUserInfoFromContext();
         if (userInfo.getRole().equals("BOSS")) {
             return true;
         } else if (userInfo.getRole().equals("MANAGER") && (role.equals("SALE") || role.equals("SHIPPER"))) {

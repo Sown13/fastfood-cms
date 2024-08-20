@@ -5,7 +5,7 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.LoginRequest;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
 import com.ffc.ffc_be.model.dto.response.LoginResponse;
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IUserInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public UserDetailsImpl signup(RegisterRequest request) {
-        UserInfoModel user = UserInfoModel.builder()
+        UserCmsInfoModel user = UserCmsInfoModel.builder()
                 .firstName(request.getFirstName())
                 .username(request.getUsername())
                 .role(request.getRole().toUpperCase())

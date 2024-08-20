@@ -2,8 +2,8 @@ package com.ffc.ffc_be.controller;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
-import com.ffc.ffc_be.model.entity.UserInfoModel;
-import com.ffc.ffc_be.service.UserInfoService;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.service.UserCmsInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('BOSS', 'MANAGER')")
 public class UserInfoController {
-    private final UserInfoService userInfoService;
+    private final UserCmsInfoService userCmsInfoService;
 
     @Operation(summary = "Only BOSS and MANAGER can create new user",
             description = "Only BOSS and MANAGER can create new user, MANAGER can only create SALE/SHIPPER"
     )
     @PostMapping("/create-user")
-    public ResponseEntity<ResponseDto<UserInfoModel>> register(@RequestBody @Valid RegisterRequest request) {
-        return userInfoService.register(request);
+    public ResponseEntity<ResponseDto<UserCmsInfoModel>> register(@RequestBody @Valid RegisterRequest request) {
+        return userCmsInfoService.register(request);
     }
 }

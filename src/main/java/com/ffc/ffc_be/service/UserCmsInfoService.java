@@ -3,7 +3,7 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.security.AuthenticationService;
 import com.ffc.ffc_be.security.UserDetailsImpl;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Service
 @CustomLog
 @RequiredArgsConstructor
-public class UserInfoService {
+public class UserCmsInfoService {
     private final AuthenticationService authService;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public UserInfoModel getUserInfoFromContext() {
+    public UserCmsInfoModel getUserInfoFromContext() {
         try {
             UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -36,7 +36,7 @@ public class UserInfoService {
         }
     }
 
-    public ResponseEntity<ResponseDto<UserInfoModel>> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<ResponseDto<UserCmsInfoModel>> register(@RequestBody @Valid RegisterRequest request) {
         UserDetailsImpl registeredUser;
         try {
             UserDetails usernameExist = userDetailsService.loadUserByUsername(request.getUsername());
