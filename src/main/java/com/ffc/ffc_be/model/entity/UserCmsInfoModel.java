@@ -14,13 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "user_info")
+@Table(name = "user_cms_info")
 @Entity
 public class UserCmsInfoModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", columnDefinition = "INT", nullable = false)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -38,12 +37,13 @@ public class UserCmsInfoModel {
     private String firstName;
 
     @Column(name = "phone", columnDefinition = "VARCHAR(13)")
-    private String phone;
+    private String primaryPhone;
 
-    @Column(name = "phone", columnDefinition = "VARCHAR(128)")
+    @Column(name = "email", columnDefinition = "VARCHAR(128)")
     private String email;
 
     @Column(name = "role", columnDefinition = "VARCHAR(50)")
+    @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
     @Column(name = "supervisor_id", columnDefinition = "INT")

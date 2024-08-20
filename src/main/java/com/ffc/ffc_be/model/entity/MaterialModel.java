@@ -16,11 +16,10 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "materials")
 @Entity
-public class Material {
+public class MaterialModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", columnDefinition = "INT", nullable = false)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -41,6 +40,7 @@ public class Material {
     private Integer shelfLife;
 
     @Column(name = "unit_type")
+    @Enumerated(EnumType.STRING)
     private UnitTypeEnum unitType;
 
     @Column(name = "description")

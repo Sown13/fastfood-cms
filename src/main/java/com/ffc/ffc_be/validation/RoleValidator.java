@@ -21,9 +21,9 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
         }
 
         UserCmsInfoModel userInfo = userCmsInfoService.getUserInfoFromContext();
-        if (userInfo.getRole().equals("BOSS")) {
+        if (userInfo.getRole().equals(RoleEnum.BOSS)) {
             return true;
-        } else if (userInfo.getRole().equals("MANAGER") && (role.equals("SALE") || role.equals("SHIPPER"))) {
+        } else if (userInfo.getRole().equals(RoleEnum.MANAGER) && (role.equals(RoleEnum.SALE) || role.equals(RoleEnum.SHIPPER))) {
             return true;
         }
 
