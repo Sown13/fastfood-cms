@@ -1,6 +1,7 @@
 package com.ffc.ffc_be.model.entity;
 
 import com.ffc.ffc_be.model.base.BaseEntity;
+import com.ffc.ffc_be.model.enums.PurposeEnum;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,5 +31,9 @@ public class ImExRecipeModel extends BaseEntity {
 
     @Column(name = "rep_type")
     @Enumerated
-    RepTypeEnum repType;
+    private RepTypeEnum repType;
+
+    @Column(name = "purpose")
+    @Enumerated
+    private PurposeEnum purpose;
 }

@@ -1,6 +1,7 @@
 package com.ffc.ffc_be.model.entity;
 
 import com.ffc.ffc_be.model.base.BaseEntity;
+import com.ffc.ffc_be.model.enums.OrderStatusEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -19,4 +20,7 @@ public class OrderModel extends BaseEntity {
 
     @Column(name = "promotion_code")
     private String promotionCode;
+
+    @Column(name = "status")
+    private OrderStatusEnum status;
 }

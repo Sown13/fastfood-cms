@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "salaries")
 @Entity
 public class SalaryModel extends BaseEntity {
-    private int salary;
+    @Column(name = "salary")//count by VND
+    private Double salary;
 
     @Column(name = "time_unit")
     @Enumerated(EnumType.STRING)
