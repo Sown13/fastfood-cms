@@ -34,7 +34,7 @@ public class UserCmsInfoModel {
     private String password;
 
     @Column(name = "fullname", columnDefinition = "VARCHAR(255)")
-    private String firstName;
+    private String fullName;
 
     @Column(name = "phone", columnDefinition = "VARCHAR(13)")
     private String primaryPhone;
@@ -47,7 +47,10 @@ public class UserCmsInfoModel {
     private RoleEnum role;
 
     @Column(name = "supervisor_id", columnDefinition = "INT")
-    private String supervisorId;
+    private Integer supervisorId;
+
+    @Column(name = "created_by", columnDefinition = "INT")
+    private Integer createdBy;
 
     @Column(name = "salary_id")
     private String salaryId;

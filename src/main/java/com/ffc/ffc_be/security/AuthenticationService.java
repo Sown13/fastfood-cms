@@ -27,12 +27,14 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
-    public UserDetailsImpl signup(RegisterRequest request) {
+    public UserDetailsImpl signup(RegisterRequest request, UserCmsInfoModel userCmsInfoModel) {
         UserCmsInfoModel user = UserCmsInfoModel.builder()
-                .firstName(request.getFirstName())
+                .fullName(request.getFullName())
                 .username(request.getUsername())
                 .role(RoleEnum.valueOf(request.getRole()))
                 .password(passwordEncoder.encode(request.getPassword()))
+                .supervisorId(userCmsInfoModel.getId())
+                .createdBy(userCmsInfoModel.getId())
                 .build();
 
         return new UserDetailsImpl(userRepository.save(user));

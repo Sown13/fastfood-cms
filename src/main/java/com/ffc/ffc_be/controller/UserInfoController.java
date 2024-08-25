@@ -2,7 +2,7 @@ package com.ffc.ffc_be.controller;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
-import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.model.dto.response.RegisterResponse;
 import com.ffc.ffc_be.service.UserCmsInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class UserInfoController {
             description = "Only BOSS and MANAGER can create new user, MANAGER can only create SALE/SHIPPER"
     )
     @PostMapping("/create-user")
-    public ResponseEntity<ResponseDto<UserCmsInfoModel>> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<ResponseDto<RegisterResponse>> register(@RequestBody @Valid RegisterRequest request) {
         return userCmsInfoService.register(request);
     }
 }

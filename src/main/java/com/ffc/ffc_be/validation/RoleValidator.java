@@ -20,7 +20,22 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
             return false;
         }
 
-        UserCmsInfoModel userInfo = userCmsInfoService.getUserInfoFromContext();
+        UserCmsInfoModel userInfo;
+        try {
+            userInfo = userCmsInfoService.getUserInfoFromContext();
+            if (userInfo == null) {
+                constraintValidatorContext.disableDefaultConstraintViolation();
+                constraintValidatorContext.buildConstraintViolationWithTemplate("Error validate, can't get user info from context")
+                        .addConstraintViolation();
+                return false;
+            }
+        } catch (Exception e) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate("Error validate when get user info from context")
+                    .addConstraintViolation();
+            return false;
+        }
+
         if (userInfo.getRole().equals(RoleEnum.BOSS)) {
             return true;
         } else if (userInfo.getRole().equals(RoleEnum.MANAGER) && (role.equals(RoleEnum.SALE) || role.equals(RoleEnum.SHIPPER))) {
