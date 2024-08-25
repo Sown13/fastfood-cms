@@ -5,7 +5,8 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.LoginRequest;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
 import com.ffc.ffc_be.model.dto.response.LoginResponse;
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.model.enums.RoleEnum;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IUserInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +27,17 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
-    public UserDetailsImpl signup(RegisterRequest request) {
-        UserInfoModel user = UserInfoModel.builder()
-                .firstName(request.getFirstName())
+    public UserDetailsImpl signup(RegisterRequest request, UserCmsInfoModel userCmsInfoModel) {
+        UserCmsInfoModel user = UserCmsInfoModel.builder()
                 .username(request.getUsername())
-                .role(request.getRole().toUpperCase())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .fullName(request.getFullName())
+                .role(RoleEnum.valueOf(request.getRole()))
+                .description(request.getDescription())
+                .email(request.getEmail())
+                .primaryPhone(request.getPhone())
+                .supervisorId(userCmsInfoModel.getId())
+                .createdBy(userCmsInfoModel.getId())
                 .build();
 
         return new UserDetailsImpl(userRepository.save(user));

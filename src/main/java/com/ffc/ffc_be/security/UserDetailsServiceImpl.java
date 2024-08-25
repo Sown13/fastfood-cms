@@ -1,6 +1,6 @@
 package com.ffc.ffc_be.security;
 
-import com.ffc.ffc_be.model.entity.UserInfoModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.repository.IUserInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserInfoModel> userInfo = userInfoRepository.findByUsername(username);
+        Optional<UserCmsInfoModel> userInfo = userInfoRepository.findByUsername(username);
         if (userInfo.isPresent()) {
             return new UserDetailsImpl(userInfo.get());
         }
@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public UserDetails loadUserById(Integer id) throws UsernameNotFoundException {
-        Optional<UserInfoModel> userBasicInfo = userInfoRepository.findById(id);
+        Optional<UserCmsInfoModel> userBasicInfo = userInfoRepository.findById(id);
         if (userBasicInfo.isPresent()) {
             return new UserDetailsImpl(userBasicInfo.get());
         }
