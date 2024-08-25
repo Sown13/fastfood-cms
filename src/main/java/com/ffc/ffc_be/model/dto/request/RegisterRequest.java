@@ -31,7 +31,7 @@ public class RegisterRequest {
     @Size(max = 2000)
     private String description;
 
-    @Size(min = 11, max = 13)
+    @Size(min = 9, max = 13)
     private String phone;
 
     @IsValidRole

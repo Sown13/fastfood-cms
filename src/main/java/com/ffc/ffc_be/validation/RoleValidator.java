@@ -14,8 +14,9 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
 
     @Override
     public boolean isValid(String role, ConstraintValidatorContext constraintValidatorContext) {
+        RoleEnum requestRole;
         try {
-            RoleEnum.valueOf(role.toUpperCase());
+            requestRole = RoleEnum.valueOf(role.toUpperCase());
         } catch (Exception e) {
             return false;
         }
@@ -36,9 +37,16 @@ public class RoleValidator implements ConstraintValidator<IsValidRole, String> {
             return false;
         }
 
+        if (requestRole.equals(RoleEnum.BOSS)) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate("Can not create user with this role")
+                    .addConstraintViolation();
+            return false;
+        }
+
         if (userInfo.getRole().equals(RoleEnum.BOSS)) {
             return true;
-        } else if (userInfo.getRole().equals(RoleEnum.MANAGER) && (role.equals(RoleEnum.SALE) || role.equals(RoleEnum.SHIPPER))) {
+        } else if (userInfo.getRole().equals(RoleEnum.MANAGER) && (requestRole.equals(RoleEnum.SALE) || requestRole.equals(RoleEnum.SHIPPER))) {
             return true;
         }
 
