@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.model.entity;
 
+import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,17 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "user_cms_info")
 @Entity
-public class UserCmsInfoModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @CreationTimestamp
-    private LocalDateTime updatedAt;
-
+public class UserCmsInfoModel extends BaseEntity {
     @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;
 

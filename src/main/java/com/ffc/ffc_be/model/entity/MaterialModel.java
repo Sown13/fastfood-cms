@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.model.entity;
 
+import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.UnitTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,17 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "materials")
 @Entity
-public class MaterialModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @CreationTimestamp
-    private LocalDateTime updatedAt;
-
+public class MaterialModel extends BaseEntity {
     @Column(name = "material_name")
     private String materialName;
 

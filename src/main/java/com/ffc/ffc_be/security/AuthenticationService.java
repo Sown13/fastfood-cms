@@ -29,10 +29,13 @@ public class AuthenticationService {
 
     public UserDetailsImpl signup(RegisterRequest request, UserCmsInfoModel userCmsInfoModel) {
         UserCmsInfoModel user = UserCmsInfoModel.builder()
-                .fullName(request.getFullName())
                 .username(request.getUsername())
-                .role(RoleEnum.valueOf(request.getRole()))
                 .password(passwordEncoder.encode(request.getPassword()))
+                .fullName(request.getFullName())
+                .role(RoleEnum.valueOf(request.getRole()))
+                .description(request.getDescription())
+                .email(request.getEmail())
+                .primaryPhone(request.getPhone())
                 .supervisorId(userCmsInfoModel.getId())
                 .createdBy(userCmsInfoModel.getId())
                 .build();

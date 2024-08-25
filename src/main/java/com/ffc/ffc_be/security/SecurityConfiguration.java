@@ -3,7 +3,6 @@ package com.ffc.ffc_be.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -26,6 +24,8 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final String PUBLIC_ENDPOINT[] = {"swagger-ui/**", "/v3/api-docs/**", "/login", "/check-authority"};
+
+    private final String PERMIT_FOR_DEVELOPING[] = {"swagger-ui/**", "/v3/api-docs/**", "/login", "/check-authority", "/user-info/create-user", "/user-info/**"};
 
     private final String BOSS_ENDPOINT[] = {"/user-info/create-user", "/user-info/**", "/**"};
 
@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(PUBLIC_ENDPOINT).permitAll())
+                        .requestMatchers(PERMIT_FOR_DEVELOPING).permitAll())
 //                .authorizeHttpRequests(request -> request
 //                        .requestMatchers(ACCOUNTANT_ENDPOINT).hasAnyRole("BOSS", "ACCOUNTANT"))
 //                .authorizeHttpRequests(request -> request

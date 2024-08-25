@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.model.entity;
 
+import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.TimeUnitEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,18 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "salaries")
 @Entity
-public class SalaryModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
-    private Integer id;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @CreationTimestamp
-    private LocalDateTime updatedAt;
-
+public class SalaryModel extends BaseEntity {
     private int salary;
 
     @Column(name = "time_unit")
