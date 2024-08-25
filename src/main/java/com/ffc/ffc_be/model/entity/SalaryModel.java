@@ -3,14 +3,12 @@ package com.ffc.ffc_be.model.entity;
 import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.TimeUnitEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
