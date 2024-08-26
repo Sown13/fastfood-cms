@@ -5,25 +5,19 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.ICRUDBaseRepository;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
-import java.lang.reflect.ParameterizedType;
-
-@AllArgsConstructor
-@RequiredArgsConstructor
 @CustomLog
-@Service
+@RequiredArgsConstructor
 public abstract class CRUDBaseService<T, ID, RQ, RP> {
     private final ICRUDBaseRepository<T, ID> repository;
     private final ModelMapper mapper;
-    private Class<T> typeOfModel = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    private Class<RQ> typeOfRequest = (Class<RQ>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    private Class<RP> typeOfResponse = (Class<RP>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    private final Class<T> typeOfModel;
+    private final Class<RQ> typeOfRequest;
+    private final Class<RP> typeOfResponse;
 
     public ResponseEntity<ResponseDto<RP>> findById(@Valid ID id) {
         try {
