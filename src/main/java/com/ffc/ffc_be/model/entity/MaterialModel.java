@@ -4,9 +4,6 @@ import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.UnitTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -34,4 +31,7 @@ public class MaterialModel extends BaseEntity {
 
     @Column(name = "created_by")
     private Integer createdBy;
+
+    @Column(name = "updated_by")
+    private Integer updatedBy;
 }

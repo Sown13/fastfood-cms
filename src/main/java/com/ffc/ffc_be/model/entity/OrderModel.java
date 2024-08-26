@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "order")
+@Table(name = "order_dish")
 @Entity
 public class OrderModel extends BaseEntity {
     @Column(name = "description")

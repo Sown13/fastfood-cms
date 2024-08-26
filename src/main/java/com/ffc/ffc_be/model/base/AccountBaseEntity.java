@@ -4,24 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public class AccountBaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @CreationTimestamp
-    private LocalDateTime updatedAt;
+public class AccountBaseEntity extends BaseEntity{
+    @Column(name = "deleted")
+    private Boolean isDeleted;
 
     @Column(name = "account_name")
     private String name;

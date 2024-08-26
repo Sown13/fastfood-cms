@@ -1,4 +1,4 @@
-package com.ffc.ffc_be.controller;
+package com.ffc.ffc_be.controller.auth;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.RegisterRequest;
