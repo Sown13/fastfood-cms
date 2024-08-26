@@ -8,8 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MaterialService extends CRUDBaseService<MaterialModel, Integer, MaterialRequest, MaterialResponse>{
-    public MaterialService(IMaterialRepository repository, ModelMapper mapper) {
-        super(repository, mapper, MaterialModel.class, MaterialRequest.class, MaterialResponse.class);
+public class MaterialService extends CRUDBaseService<MaterialModel, Integer, MaterialRequest, MaterialResponse> {
+    public MaterialService(IMaterialRepository repository, ModelMapper mapper, UserCmsInfoService userCmsInfoService) {
+        super(repository, mapper, userCmsInfoService, MaterialModel.class, MaterialRequest.class, MaterialResponse.class);
     }
 }

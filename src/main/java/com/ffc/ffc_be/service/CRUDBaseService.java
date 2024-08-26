@@ -2,6 +2,7 @@ package com.ffc.ffc_be.service;
 
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import jakarta.validation.Valid;
 import lombok.CustomLog;
@@ -10,11 +11,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @CustomLog
 @RequiredArgsConstructor
 public abstract class CRUDBaseService<T, ID, RQ, RP> {
     private final JpaRepository<T, ID> repository;
     private final ModelMapper mapper;
+    private final UserCmsInfoService userCmsInfoService;
     private final Class<T> typeOfModel;
     private final Class<RQ> typeOfRequest;
     private final Class<RP> typeOfResponse;
@@ -39,9 +44,41 @@ public abstract class CRUDBaseService<T, ID, RQ, RP> {
         }
     }
 
-    public ResponseEntity<ResponseDto<RP>> addNew(RQ request) {
+    public ResponseEntity<ResponseDto<List<RP>>> findAll() {
+        try {
+            List<T> result = repository.findAll();
+            List<RP> response = new ArrayList<>();
+            for (T entity : result) {
+                RP item = mapper.map(entity, typeOfResponse);
+                response.add(item);
+            }
+
+            return ResponseBuilder.okResponse("Successfully!",
+                    response,
+                    StatusCodeEnum.STATUSCODE1001);
+        } catch (Exception enemyOfEternity) {
+            log.error("Error when fetching data from db", enemyOfEternity);
+
+            return ResponseBuilder.badRequestResponse("Request Failed!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+    }
+
+    public ResponseEntity<ResponseDto<RP>> create(RQ request) {
         try {
             T newRecord = mapper.map(request, typeOfModel);
+            UserCmsInfoModel userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
+            if (userCmsInfoModel == null) {
+                return ResponseBuilder.badRequestResponse("Request Failed! Cannot get user info from context",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+
+            try {
+                newRecord.getClass().getMethod("setCreatedBy", Integer.class).invoke(newRecord, userCmsInfoModel.getId());
+            } catch (Exception e) {
+                log.info("There no created_by for this entity", e);
+            }
+
             T result = repository.save(newRecord);
             RP response = mapper.map(result, typeOfResponse);
 
@@ -61,7 +98,7 @@ public abstract class CRUDBaseService<T, ID, RQ, RP> {
         }
     }
 
-    public ResponseEntity<ResponseDto<Object>> update(RQ request, ID id) {
+    public ResponseEntity<ResponseDto<RP>> update(RQ request, ID id) {
         try {
             T updatingTarget = repository.findById(id).orElse(null);
             if (updatingTarget == null) {
@@ -69,11 +106,25 @@ public abstract class CRUDBaseService<T, ID, RQ, RP> {
                         StatusCodeEnum.STATUSCODE2001);
             }
 
+            UserCmsInfoModel userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
+            if (userCmsInfoModel == null) {
+                return ResponseBuilder.badRequestResponse("Request Failed! Cannot get user info from context",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+
+            try {
+                updatingTarget.getClass().getMethod("setUpdatedBy", Integer.class).invoke(updatingTarget, userCmsInfoModel.getId());
+            } catch (Exception e) {
+                log.info("There no updated_by for this entity", e);
+            }
+
             mapper.map(request, updatingTarget);
 
             T updatedEntity = repository.save(updatingTarget);
+            RP response = mapper.map(updatedEntity, typeOfResponse);
 
             return ResponseBuilder.okResponse("Update successfully!",
+                    response,
                     StatusCodeEnum.STATUSCODE1001);
         } catch (Exception e) {
             log.error("Failed when update", e);
@@ -91,9 +142,7 @@ public abstract class CRUDBaseService<T, ID, RQ, RP> {
                         StatusCodeEnum.STATUSCODE2001);
             }
 
-            deletingTarget.getClass().getMethod("isDeleted", boolean.class).invoke(deletingTarget, false);
-
-            T deletedEntity = repository.save(deletingTarget);
+            repository.deleteById(id);
 
             return ResponseBuilder.okResponse("Delete successfully!",
                     StatusCodeEnum.STATUSCODE1001);

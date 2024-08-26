@@ -5,12 +5,10 @@ import com.ffc.ffc_be.model.dto.request.MaterialRequest;
 import com.ffc.ffc_be.model.dto.response.MaterialResponse;
 import com.ffc.ffc_be.model.entity.MaterialModel;
 import com.ffc.ffc_be.service.CRUDBaseService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/materials")
@@ -23,5 +21,27 @@ public class MaterialController extends CRUDBaseController<MaterialModel, Intege
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<MaterialResponse>> getById(@PathVariable Integer id) {
         return super.getById(id);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto<List<MaterialResponse>>> getAll() {
+        return super.getAll();
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto<MaterialResponse>> create(@RequestBody MaterialRequest request) {
+        return super.create(request);
+    }
+
+    @Override
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDto<MaterialResponse>> update(@PathVariable Integer id, @RequestBody MaterialRequest request) {
+        return super.update(id, request);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto<Object>> delete(@PathVariable Integer id) {
+        return super.delete(id);
     }
 }

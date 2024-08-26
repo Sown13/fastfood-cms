@@ -31,4 +31,7 @@ public class MaterialModel extends BaseEntity {
 
     @Column(name = "created_by")
     private Integer createdBy;
+
+    @Column(name = "updated_by")
+    private Integer updatedBy;
 }

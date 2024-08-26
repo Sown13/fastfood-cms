@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.model.dto.response;
 
+import com.ffc.ffc_be.model.base.BaseResponse;
 import com.ffc.ffc_be.model.enums.UnitTypeEnum;
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MaterialResponse {
+public class MaterialResponse extends BaseResponse {
+    private Integer id;
     private String name;
     private String code;
     private Integer shelfLife;
@@ -23,4 +24,5 @@ public class MaterialResponse {
 
     private String description;
     private Integer createdBy;
+    private Integer updatedBy;
 }
