@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.service;
 
+import com.ffc.ffc_be.model.builder.MetaData;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
@@ -8,11 +9,14 @@ import jakarta.validation.Valid;
 import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CustomLog
 @RequiredArgsConstructor
@@ -44,18 +48,25 @@ public abstract class CRUDBaseService<T, ID, RQ, RP> {
         }
     }
 
-    public ResponseEntity<ResponseDto<List<RP>>> findAll() {
+    public ResponseEntity<ResponseDto<List<RP>>> findAll(Integer page, Integer size) {
         try {
-            List<T> result = repository.findAll();
-            List<RP> response = new ArrayList<>();
-            for (T entity : result) {
-                RP item = mapper.map(entity, typeOfResponse);
-                response.add(item);
+            if (page == null || page < 0) {
+                page = 0;
             }
+            if (size == null || size < 1) {
+                size = 10;
+            }
+            Pageable pageable = PageRequest.of(page, size);
+
+            Page<T> result = repository.findAll(pageable);
+            List<RP> response = result.stream()
+                    .map(entity -> mapper.map(entity, typeOfResponse))
+                    .collect(Collectors.toList());
 
             return ResponseBuilder.okResponse("Successfully!",
                     response,
-                    StatusCodeEnum.STATUSCODE1001);
+                    StatusCodeEnum.STATUSCODE1001,
+                    MetaData.builder().currentPage(page).pageSize(size).totalItems((int) result.getTotalElements()).totalPage(result.getTotalPages()).build());
         } catch (Exception enemyOfEternity) {
             log.error("Error when fetching data from db", enemyOfEternity);
 
