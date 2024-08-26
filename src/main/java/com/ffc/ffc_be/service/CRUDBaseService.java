@@ -3,17 +3,17 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
-import com.ffc.ffc_be.repository.ICRUDBaseRepository;
 import jakarta.validation.Valid;
 import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 
 @CustomLog
 @RequiredArgsConstructor
 public abstract class CRUDBaseService<T, ID, RQ, RP> {
-    private final ICRUDBaseRepository<T, ID> repository;
+    private final JpaRepository<T, ID> repository;
     private final ModelMapper mapper;
     private final Class<T> typeOfModel;
     private final Class<RQ> typeOfRequest;
