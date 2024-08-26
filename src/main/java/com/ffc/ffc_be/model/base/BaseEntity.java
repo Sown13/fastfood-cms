@@ -1,9 +1,6 @@
 package com.ffc.ffc_be.model.base;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +23,7 @@ public class BaseEntity {
 
     @CreationTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "deleted")
+    private boolean isDeleted;
 }

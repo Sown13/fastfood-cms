@@ -23,6 +23,9 @@ public class AccountBaseEntity {
     @CreationTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(name = "deleted")
+    private boolean isDeleted;
+
     @Column(name = "account_name")
     private String name;
 
