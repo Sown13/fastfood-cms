@@ -34,4 +34,7 @@ public class MaterialModel extends BaseEntity {
 
     @Column(name = "updated_by")
     private Integer updatedBy;
+
+    @Column(name = "deprecated")
+    private Boolean isDeprecated;
 }

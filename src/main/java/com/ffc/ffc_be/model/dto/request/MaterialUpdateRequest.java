@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaterialRequest {
+public class MaterialUpdateRequest {
     private String name;
     private String code;
     private Integer shelfLife;
