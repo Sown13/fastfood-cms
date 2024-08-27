@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <!-- Define properties for log file paths -->
+        <Property name="LOG_DIR">./sso_be/logs</Property>
+    </Properties>
+
+    <!-- Console appender -->
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{%-5level} %d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%magenta{%X{module}}] %highlight{%-75logger{75}:%-4line} | %msg%throwable%n"/>
+        </Console>
+
+        <!-- INFO File appender -->
+        <RollingFile name="InfoFile" fileName="./logs/info/info.log"
+                     filePattern="./logs/info/info.%d{yyyy-MM-dd}.%i.log">
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <pattern>%-5level %d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%X{module}] %-75logger{75}:%-4line | %msg%throwable%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1000">
+                <Delete basePath="./logs/info" maxDepth="1">
+                    <IfFileName glob="info.*.log"/>
+                    <IfLastModified age="180d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- WARN File appender -->
+        <RollingFile name="WarnFile" fileName="./logs/warn/warn.log"
+                     filePattern="./logs/warn/warn.%d{yyyy-MM-dd}.%i.log">
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <pattern>%-5level %d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%X{module}] %-75logger{75}:%-4line | %msg%throwable%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1000">
+                <Delete basePath="./logs/warn" maxDepth="1">
+                    <IfFileName glob="warn.*.log"/>
+                    <IfLastModified age="180d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- ERROR File appender -->
+        <RollingFile name="ErrorFile" fileName="./logs/error/error.log"
+                     filePattern="./logs/error/error.%d{yyyy-MM-dd}.%i.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <pattern>%-5level %d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%X{module}] %-75logger{75}:%-4line | %msg%throwable%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1000">
+                <Delete basePath="./logs/error" maxDepth="1">
+                    <IfFileName glob="error.*.log"/>
+                    <IfLastModified age="180d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <!-- Root logger configuration -->
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="InfoFile"/>
+            <AppenderRef ref="WarnFile"/>
+            <AppenderRef ref="ErrorFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
