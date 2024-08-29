@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
         final ResponseDto<T> dto = ResponseDto.<T>
                         builder()
                 .success(false)
-                .message(messageSource.getMessage("exception.exception", null, locale))
+                .message(ex.getMessage())
                 .statusCode(StatusCodeEnum.EXCEPTION.toString())
                 .build();
         return ResponseEntity.ok(dto);
