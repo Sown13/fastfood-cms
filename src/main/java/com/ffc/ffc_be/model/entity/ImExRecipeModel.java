@@ -17,9 +17,6 @@ import lombok.*;
 @Table(name = "import_export_rep")
 @Entity
 public class ImExRecipeModel extends BaseEntity {
-    @Column(name = "quantity")
-    private Integer quantity;
-
     @Column(name = "created_by")
     private Integer createdBy;
 

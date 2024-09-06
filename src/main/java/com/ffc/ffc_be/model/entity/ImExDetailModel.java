@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -26,7 +26,7 @@ public class ImExDetailModel extends BaseEntity {
     private Integer quantity;
 
     @Column(name = "factory_date")
-    private LocalDate factoryDate;
+    private LocalDateTime factoryDate;
 
     @Column(name = "note")
     private String note;
@@ -36,4 +36,7 @@ public class ImExDetailModel extends BaseEntity {
 
     @Column(name = "unit_value")
     private Double valuePerUnit;
+
+    @Column(name = "supplier") // supplier if it is import and buyer if it is export
+    private String supplier;
 }
