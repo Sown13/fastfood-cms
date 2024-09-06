@@ -5,6 +5,7 @@ import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
 import com.ffc.ffc_be.service.ImExRecipeService;
 import com.ffc.ffc_be.service.InventoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class DemoController {
     }
 
     @PostMapping("/im-ex")
-    public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody ImExCreateRequest request){
+    public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody @Valid ImExCreateRequest request){
         return imExRecipeService.createImEx(request);
     }
 }

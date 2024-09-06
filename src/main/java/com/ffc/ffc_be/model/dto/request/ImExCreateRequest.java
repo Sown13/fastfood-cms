@@ -2,6 +2,9 @@ package com.ffc.ffc_be.model.dto.request;
 
 import com.ffc.ffc_be.model.enums.PurposeEnum;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +20,7 @@ public class ImExCreateRequest {
     private RepTypeEnum repType;
     private PurposeEnum purpose;
     private String supplier;
+
+    @Valid
     private List<ImExDetailDto> detailList;
 }
