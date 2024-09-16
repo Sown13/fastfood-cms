@@ -3,9 +3,8 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.MetaData;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.puredto.ImExDetailHistoryDto;
-import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
+import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
@@ -43,7 +42,7 @@ public class ImExRecipeService {
         }
     }
 
-    public ResponseEntity<ResponseDto<ImExDetailHistoryResponse>> getImExDetailHistoryList(Integer page, Integer size, RepTypeEnum repType) {
+    public ResponseEntity<ResponseDto<List<ImExDetailHistoryResponse>>> getImExDetailHistoryList(Integer page, Integer size, RepTypeEnum repType) {
         try {
             if (page == null || page < 0) {
                 page = 0;
@@ -53,11 +52,9 @@ public class ImExRecipeService {
             }
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-            List<ImExDetailHistoryDto> results = imExDetailRepository.getImExDetailHistoryList(repType, pageable);
+            List<ImExDetailHistoryResponse> response = imExDetailRepository.getImExDetailHistoryList(repType, pageable);
             long totalElements = imExDetailRepository.countImExDetailHistory(repType);
             int totalPages = totalElements % size == 0 ? (int) totalElements / size : (int) (totalElements / size + 1);
-            ImExDetailHistoryResponse response = new ImExDetailHistoryResponse();
-            response.setImExDetailHistoryList(results);
 
             MetaData metaData = MetaData.builder()
                     .currentPage(page)

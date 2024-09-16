@@ -1,7 +1,6 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.puredto.ImExDetailHistoryDto;
 import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
@@ -36,9 +35,9 @@ public class DemoController {
     }
 
     @GetMapping("/im-ex-list")
-    public ResponseEntity<ResponseDto<ImExDetailHistoryResponse>> demoImExDetail(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
-                                                                                 @RequestParam(name = "repType", required = true, defaultValue = "IMPORT") RepTypeEnum repType) {
+    public ResponseEntity<ResponseDto<List<ImExDetailHistoryResponse>>> demoImExDetail(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                                       @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                                       @RequestParam(name = "repType", required = true, defaultValue = "IMPORT") RepTypeEnum repType) {
         return imExRecipeService.getImExDetailHistoryList(page, size, repType);
     }
 }

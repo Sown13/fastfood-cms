@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/im-ex-recipe")
 @RequiredArgsConstructor
@@ -21,9 +23,9 @@ public class ImExRecipeController {
             description = "Default order by newest, default page = 0, size = 10"
     )
     @GetMapping
-    public ResponseEntity<ResponseDto<ImExDetailHistoryResponse>> getImExDetailHistoryList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                                                                           @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
-                                                                                           @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
+    public ResponseEntity<ResponseDto<List<ImExDetailHistoryResponse>>> getImExDetailHistoryList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                                                 @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
         return imExRecipeService.getImExDetailHistoryList(page, size, repType);
     }
 
