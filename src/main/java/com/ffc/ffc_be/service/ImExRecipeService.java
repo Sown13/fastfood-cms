@@ -3,8 +3,10 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
+import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
+import com.ffc.ffc_be.repository.IImExDetailRepository;
 import com.ffc.ffc_be.transaction.ImExTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImExRecipeService {
     private final ImExTransaction imExTransaction;
+    private final IImExDetailRepository imExDetailRepository;
 
     public ResponseEntity<ResponseDto<Object>> createImEx(ImExCreateRequest request) {
         try {
@@ -29,5 +32,10 @@ public class ImExRecipeService {
             return ResponseBuilder.badRequestResponse("Failed to create im/ex recipe",
                     StatusCodeEnum.STATUSCODE2001);
         }
+    }
+
+    public ResponseEntity<ResponseDto<ImExDetailHistoryResponse>> getImExDetailHistoryList() {
+
+        return null;
     }
 }

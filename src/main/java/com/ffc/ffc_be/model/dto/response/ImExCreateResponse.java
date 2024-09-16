@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.model.dto.response;
 
+import com.ffc.ffc_be.model.dto.puredto.ImExRecipeDto;
 import com.ffc.ffc_be.model.enums.PurposeEnum;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import lombok.AllArgsConstructor;

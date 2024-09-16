@@ -1,4 +1,4 @@
-package com.ffc.ffc_be.model.dto.response;
+package com.ffc.ffc_be.model.dto.puredto;
 
 import com.ffc.ffc_be.model.enums.UnitTypeEnum;
 import lombok.AllArgsConstructor;

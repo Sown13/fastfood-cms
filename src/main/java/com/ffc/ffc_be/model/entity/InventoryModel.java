@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
                 " FROM " +
                 "(SELECT inv.material_id FROM inventory inv LIMIT :limit OFFSET :offset) as temp" + // core trick for better performance paginate
                 " LEFT JOIN inventory inv ON inv.material_id = temp.material_id" +
-                " LEFT JOIN materials mt ON inv.material_id = temp.material_id",
+                " LEFT JOIN materials mt ON mt.id = inv.material_id",
         resultSetMapping = "Mapping.InventoryResponse")
 @SqlResultSetMapping(
         name = "Mapping.InventoryResponse",

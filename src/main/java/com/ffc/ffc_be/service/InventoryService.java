@@ -35,7 +35,6 @@ public class InventoryService {
             }
             Pageable pageable = PageRequest.of(page, size);
             Page<InventoryResponse> result = inventoryRepository.getNewestInventory(pageable);
-//            todo: there error when size = 2 or page > 1, need check later
             List<InventoryResponse> response = result.stream()
                     .map(entity -> mapper.map(entity, InventoryResponse.class))
                     .collect(Collectors.toList());

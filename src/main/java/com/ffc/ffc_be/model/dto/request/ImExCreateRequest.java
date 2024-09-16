@@ -1,9 +1,8 @@
 package com.ffc.ffc_be.model.dto.request;
 
+import com.ffc.ffc_be.model.dto.puredto.ImExDetailDto;
 import com.ffc.ffc_be.model.enums.PurposeEnum;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.ffc.ffc_be.model.dto.request;
+package com.ffc.ffc_be.model.dto.puredto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

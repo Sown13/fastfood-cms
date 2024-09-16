@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.transaction;
 
 import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
-import com.ffc.ffc_be.model.dto.request.ImExDetailDto;
+import com.ffc.ffc_be.model.dto.puredto.ImExDetailDto;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.entity.ImExRecipeModel;
 import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
