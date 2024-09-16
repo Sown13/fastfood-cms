@@ -28,7 +28,7 @@ public interface IImExDetailRepository extends JpaRepository<ImExDetailModel, In
             "JOIN UserCmsInfoModel ucr ON re.responsibleBy = ucr.id" +
             " WHERE re.repType = :repType"
     )
-    List<ImExDetailHistoryDto> getImExDetailHistoryList(RepTypeEnum repType, Pageable pageable);
+    List<ImExDetailHistoryDto> getImExDetailHistoryList(RepTypeEnum repType, Pageable pageable); //note for me: pageable inter face always add limit and offset into the end of query
 
     @Query("SELECT COUNT(ied) " +
             "FROM ImExDetailModel ied " +
