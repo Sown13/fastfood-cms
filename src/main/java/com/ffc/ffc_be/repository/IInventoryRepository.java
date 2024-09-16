@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IInventoryRepository extends JpaRepository<InventoryModel, Integer> {
     @Query(nativeQuery = true)
     Page<InventoryResponse> getNewestInventory(Pageable pageable);
+
+    Optional<InventoryModel> findByMaterialId(Integer materialId);
 }
