@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImExDetailHistoryDto {
+    private Integer id;
     private Integer recipeId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -24,7 +25,9 @@ public class ImExDetailHistoryDto {
     private Double valuePerUnit;
     private String supplier;
     private Integer createdBy;
+    private String createdByName;
     private Integer responsibleBy;
+    private String responsibleName;
     private RepTypeEnum repType;
     private PurposeEnum purpose;
 }

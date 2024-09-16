@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface IInventoryRepository extends JpaRepository<InventoryModel, Integer> {
+    //Practice with named query
     @Query(nativeQuery = true, name = "InventoryModel.getNewestInventory")
     List<InventoryResponse> getNewestInventoryWithPagination(@Param("limit") int limit, @Param("offset") int offset);
 
