@@ -1,8 +1,5 @@
 package com.ffc.ffc_be.model.dto.response;
 
-import com.ffc.ffc_be.model.enums.UnitTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

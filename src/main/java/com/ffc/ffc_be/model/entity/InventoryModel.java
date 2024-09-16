@@ -12,7 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "inventory")
+@Table(name = "inventory",
+        indexes = {
+                @Index(name = "idx_material_id", columnList = "material_id") //indexing for better performance of paginate
+        })
 @Entity
 @NamedNativeQuery(
         name = "InventoryModel.getNewestInventory",
@@ -21,8 +24,10 @@ import java.time.LocalDateTime;
                 "inv.material_id as materialId, mt.name as name, mt.code as code, inv.quantity as quantity, " +
                 "mt.unit_type as unitType, mt.shelf_life as shelfLife, mt.description as description," +
                 "inv.note as note, mt.deprecated as deprecated" +
-                " FROM inventory inv" +
-                " LEFT JOIN materials mt ON inv.material_id = mt.id",
+                " FROM " +
+                "(SELECT inv.material_id FROM inventory inv LIMIT :limit OFFSET :offset) as temp" + // core trick for better performance paginate
+                " LEFT JOIN inventory inv ON inv.material_id = temp.material_id" +
+                " LEFT JOIN materials mt ON inv.material_id = temp.material_id",
         resultSetMapping = "Mapping.InventoryResponse")
 @SqlResultSetMapping(
         name = "Mapping.InventoryResponse",
