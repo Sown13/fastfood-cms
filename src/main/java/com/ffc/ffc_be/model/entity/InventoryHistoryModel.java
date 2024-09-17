@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -17,8 +18,14 @@ import java.time.LocalDate;
 @Entity
 public class InventoryHistoryModel extends BaseEntity {
     @Column(name = "reported_date")
-    private LocalDate reportedDate;
+    private LocalDateTime reportedDate;
 
     @Column(name="reported_by")
     private Integer reportedBy;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
 }
