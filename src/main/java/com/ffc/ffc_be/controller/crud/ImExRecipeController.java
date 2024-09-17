@@ -3,6 +3,8 @@ package com.ffc.ffc_be.controller.crud;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
+import com.ffc.ffc_be.model.dto.response.ImExRecipeDetailResponse;
+import com.ffc.ffc_be.model.dto.response.ImExRecipeResponse;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import com.ffc.ffc_be.service.ImExRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,10 +21,20 @@ import java.util.List;
 public class ImExRecipeController {
     private final ImExRecipeService imExRecipeService;
 
-    @Operation(summary = "Get list im/ex detail",
+    @Operation(summary = "Get list im/ex recipe list",
             description = "Default order by newest, default page = 0, size = 10"
     )
     @GetMapping
+    public ResponseEntity<ResponseDto<List<ImExRecipeResponse>>> getImExRecipeList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                                   @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                                   @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
+        return imExRecipeService.getImExRecipeList(page, size, repType);
+    }
+
+    @Operation(summary = "Get list im/ex detail",
+            description = "Default order by newest, default page = 0, size = 10"
+    )
+    @GetMapping("/detail-list")
     public ResponseEntity<ResponseDto<List<ImExDetailHistoryResponse>>> getImExDetailHistoryList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
                                                                                                  @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
@@ -35,5 +47,13 @@ public class ImExRecipeController {
     @PostMapping("/im-ex")
     public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody @Valid ImExCreateRequest request) {
         return imExRecipeService.createImEx(request);
+    }
+
+    @Operation(summary = "Get list im/ex recipe detail",
+            description = "Default order by newest, default page = 0, size = 10"
+    )
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<ResponseDto<ImExRecipeDetailResponse>> getImExRecipeDetail(@PathVariable Integer recipeId) {
+        return imExRecipeService.getImExRecipeDetail(recipeId);
     }
 }

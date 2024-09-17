@@ -1,5 +1,6 @@
 package com.ffc.ffc_be.repository;
 
+import com.ffc.ffc_be.model.dto.puredto.ImExRecipeDetailDto;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
@@ -38,4 +39,13 @@ public interface IImExDetailRepository extends JpaRepository<ImExDetailModel, In
             "JOIN UserCmsInfoModel ucr ON re.responsibleBy = ucr.id" +
             " WHERE re.repType = :repType")
     long countImExDetailHistory(@Param("repType") RepTypeEnum repType);
+
+    @Query("SELECT new com.ffc.ffc_be.model.dto.puredto.ImExRecipeDetailDto(" +
+            "ied.id, ied.materialId, ms.name, ied.quantity, ied.factoryDate," +
+            "ied.note, ied.totalValue, ied.valuePerUnit, ied.supplier)" +
+            "FROM ImExDetailModel ied " +
+            "JOIN MaterialModel ms ON ied.materialId = ms.id " +
+            "JOIN ImExRecipeModel ier ON ied.recipeId = ier.id " +
+            "WHERE ied.recipeId = :recipeId")
+    List<ImExRecipeDetailDto> getImExRecipeDetailByRecipeId(Integer recipeId);
 }
