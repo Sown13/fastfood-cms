@@ -6,7 +6,6 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.CreateInventoryHistoryRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
-import com.ffc.ffc_be.model.entity.InventoryHistoryModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IInventoryHistoryRepository;
 import com.ffc.ffc_be.repository.IInventoryRepository;
