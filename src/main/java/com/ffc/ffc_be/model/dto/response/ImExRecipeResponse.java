@@ -1,7 +1,8 @@
 package com.ffc.ffc_be.model.dto.response;
 
+import com.ffc.ffc_be.model.enums.PurposeEnum;
+import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,18 +11,15 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class InventoryResponse {
+public class ImExRecipeResponse {
     private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Integer materialId;
-    private String name;
-    private String code;
-    private Integer quantity;
-    private String unitType;
-    private Integer shelfLife;
+    private Integer createdBy;
+    private String createdByName;
+    private Integer responsibleBy;
+    private String responsibleByName;
     private String description;
-    private String note;
-    private Boolean deprecated;
+    private RepTypeEnum repType;
+    private PurposeEnum purpose;
 }

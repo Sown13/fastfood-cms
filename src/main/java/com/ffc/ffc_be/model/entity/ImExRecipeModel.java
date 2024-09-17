@@ -3,10 +3,7 @@ package com.ffc.ffc_be.model.entity;
 import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.PurposeEnum;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
@@ -17,9 +14,6 @@ import lombok.*;
 @Table(name = "import_export_rep")
 @Entity
 public class ImExRecipeModel extends BaseEntity {
-    @Column(name = "quantity")
-    private Integer quantity;
-
     @Column(name = "created_by")
     private Integer createdBy;
 
@@ -30,10 +24,10 @@ public class ImExRecipeModel extends BaseEntity {
     private String description;
 
     @Column(name = "rep_type")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private RepTypeEnum repType;
 
     @Column(name = "purpose")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PurposeEnum purpose;
 }
