@@ -51,9 +51,9 @@ public class MenuDishService {
             if (isActivate == null) {
                 result = menuDishRepository.findAll(pageable);
             } else if (isActivate) {
-                result = menuDishRepository.findAllByIsActivateTrue(pageable);
+                result = menuDishRepository.findAllByIsActiveTrue(pageable);
             } else {
-                result = menuDishRepository.findAllByIsActivateFalse(pageable);
+                result = menuDishRepository.findAllByIsActiveFalse(pageable);
             }
 
             List<MenuDishModel> response = result.getContent();
@@ -132,7 +132,7 @@ public class MenuDishService {
                     .price(request.getPrice())
                     .category(request.getCategory())
                     .createdBy(userCmsInfoModel.getId())
-                    .isActivate(true)
+                    .isActive(true)
                     .build();
             menuDishCreated = menuDishRepository.save(newMenuDishModel);
         } catch (Exception e) {
@@ -161,5 +161,20 @@ public class MenuDishService {
             return ResponseBuilder.badRequestResponse("Error when get create menu dish detail!",
                     StatusCodeEnum.STATUSCODE2001);
         }
+    }
+
+    public ResponseEntity<ResponseDto<MenuDishModel>> toggleMenuDish(Integer menuId) {
+
+        menuDishRepository.toggleActiveStatus(menuId);
+
+        MenuDishModel response = menuDishRepository.findById(menuId).orElse(null);
+        if (response == null) {
+            return ResponseBuilder.badRequestResponse("Menu not found!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+        return ResponseBuilder.okResponse("Change menu active successfully!",
+                response,
+                StatusCodeEnum.STATUSCODE1001);
     }
 }

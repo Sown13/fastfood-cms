@@ -44,4 +44,12 @@ public class MenuDishController {
     public ResponseEntity<ResponseDto<Object>> createMenuDish(@Valid @RequestBody CreateMenuDishRequest request) {
         return menuDishService.createMenuDish(request);
     }
+
+    @Operation(summary = "Toggle menu active",
+            description = "Change between true and false for the 'active' field"
+    )
+    @PostMapping("/toggle/{menuId}")
+    public ResponseEntity<ResponseDto<MenuDishModel>> toggleMenuActive(@PathVariable Integer menuId) {
+        return menuDishService.toggleMenuDish(menuId);
+    }
 }
