@@ -1,10 +1,12 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
+import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
 import com.ffc.ffc_be.model.entity.MenuDishDetailModel;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
 import com.ffc.ffc_be.service.MenuDishService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +34,13 @@ public class MenuDishController {
     @GetMapping("/{menuId}")
     public ResponseEntity<ResponseDto<List<MenuDishDetailModel>>> getMenuDetailByMenuId(@PathVariable Integer menuId) {
         return menuDishService.getMenuDetailMaterialsByMenuId(menuId);
+    }
+
+    @Operation(summary = "Create menu",
+            description = "Create menu dish (and recipe corresponding to that menu)"
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDto<Object>> createMenuDish(@Valid @RequestBody CreateMenuDishRequest request) {
+        return menuDishService.createMenuDish(request);
     }
 }

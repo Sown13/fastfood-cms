@@ -3,8 +3,11 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.MetaData;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
+import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailDto;
+import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
 import com.ffc.ffc_be.model.entity.MenuDishDetailModel;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
+import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IMenuDishDetailRepository;
 import com.ffc.ffc_be.repository.IMenuDishRepository;
@@ -16,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +30,7 @@ import java.util.List;
 public class MenuDishService {
     private final IMenuDishRepository menuDishRepository;
     private final IMenuDishDetailRepository menuDishDetailRepository;
+    private final UserCmsInfoService userCmsInfoService;
 
     public ResponseEntity<ResponseDto<List<MenuDishModel>>> getAllMenuDishes(Integer page, Integer size) {
         try {
@@ -70,6 +76,66 @@ public class MenuDishService {
                     StatusCodeEnum.STATUSCODE1001);
         } catch (Exception e) {
             return ResponseBuilder.badRequestResponse("Get menu dish detail material failed!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseDto<Object>> createMenuDish(CreateMenuDishRequest request) {
+        UserCmsInfoModel userCmsInfoModel;
+        try {
+            userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
+            if (userCmsInfoModel == null) {
+                log.info("Cannot get user info from context");
+
+                return ResponseBuilder.badRequestResponse("Wrong user cms info!",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error when get user info from context!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+        MenuDishModel menuDishCreated;
+        try {
+            Integer cookTime = request.getMenuDishDetailList().stream()
+                    .mapToInt(MenuDishDetailDto::getPrepareTime)
+                    .sum();
+
+            MenuDishModel newMenuDishModel = MenuDishModel.builder()
+                    .name(request.getName())
+                    .descriptionPublic(request.getDescriptionPublic())
+                    .descriptionPrivate(request.getDescriptionPrivate())
+                    .cookTime(cookTime)
+                    .price(request.getPrice())
+                    .category(request.getCategory())
+                    .createdBy(userCmsInfoModel.getId())
+                    .build();
+            menuDishCreated = menuDishRepository.save(newMenuDishModel);
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error when get create menu dish!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+        try {
+            List<MenuDishDetailModel> menuDishDetailModelList = new ArrayList<>();
+            for (MenuDishDetailDto dto : request.getMenuDishDetailList()) {
+                MenuDishDetailModel model = MenuDishDetailModel.builder()
+                        .materialId(dto.getMaterialId())
+                        .menuDishId(menuDishCreated.getId())
+                        .quantity(dto.getQuantity())
+                        .note(dto.getNote())
+                        .prepareTime(dto.getPrepareTime())
+                        .build();
+                menuDishDetailModelList.add(model);
+            }
+
+            menuDishDetailRepository.saveAll(menuDishDetailModelList);
+
+            return ResponseBuilder.okResponse("Create menu successfully!",
+                    StatusCodeEnum.STATUSCODE1001);
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error when get create menu dish detail!",
                     StatusCodeEnum.STATUSCODE2001);
         }
     }
