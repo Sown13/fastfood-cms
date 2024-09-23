@@ -6,7 +6,9 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.CreateInventoryHistoryRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
+import com.ffc.ffc_be.model.entity.InventoryHistoryDetailModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
+import com.ffc.ffc_be.repository.IInventoryHistoryDetailRepository;
 import com.ffc.ffc_be.repository.IInventoryHistoryRepository;
 import com.ffc.ffc_be.repository.IInventoryRepository;
 import com.ffc.ffc_be.transaction.InventoryHistoryTransaction;
@@ -31,6 +33,7 @@ public class InventoryService {
     private final IInventoryRepository inventoryRepository;
     private final InventoryHistoryTransaction inventoryHistoryTransaction;
     private final IInventoryHistoryRepository inventoryHistoryRepository;
+    private final IInventoryHistoryDetailRepository inventoryHistoryDetailRepository;
     private final ModelMapper mapper;
 
     public ResponseEntity<ResponseDto<List<InventoryResponse>>> getCurrentInventory(Integer page, Integer size) {
@@ -89,9 +92,12 @@ public class InventoryService {
         CreateInventoryHistoryRequest request = new CreateInventoryHistoryRequest(description, false);
         try {
             inventoryHistoryTransaction.createInventoryHistory(request);
-            log.info(description + " Successfully!");
+
+            String logMessage = description + " Successfully!";
+            log.info(logMessage);
         } catch (Exception e) {
-            log.error("Error when" + description);
+            String logMessage = "Error when" + description;
+            log.error(logMessage);
         }
     }
 
@@ -120,6 +126,42 @@ public class InventoryService {
                     metaData);
         } catch (Exception e) {
             return ResponseBuilder.badRequestResponse("Error happen when get inventory history list",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+    }
+
+    public ResponseEntity<ResponseDto<List<InventoryHistoryDetailModel>>> getInventoryHistoryListDetail(Integer inventoryHistoryId, Integer page, Integer size) {
+        if (inventoryHistoryId == null || inventoryHistoryId < 0) {
+            return ResponseBuilder.badRequestResponse("Inventory history id invalid!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+        if (page == null || page < 0) {
+            page = 0;
+        }
+        if (size == null || size < 1) {
+            size = 10;
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        try {
+            Page<InventoryHistoryDetailModel> result = inventoryHistoryDetailRepository.findInventoryHistoryDetailModelsByInventoryHistoryId(inventoryHistoryId, pageable);
+            List<InventoryHistoryDetailModel> inventoryHistoryDetailList = result.getContent();
+
+            MetaData metaData = MetaData.builder()
+                    .currentPage(page)
+                    .pageSize(size)
+                    .totalItems((int) result.getTotalElements())
+                    .totalPage(result.getTotalPages())
+                    .build();
+
+            return ResponseBuilder.okResponse("Get inventory history detail list successfully!",
+                    inventoryHistoryDetailList,
+                    StatusCodeEnum.STATUSCODE1001,
+                    metaData
+            );
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error happen when get inventory history detail list",
                     StatusCodeEnum.STATUSCODE2001);
         }
     }
