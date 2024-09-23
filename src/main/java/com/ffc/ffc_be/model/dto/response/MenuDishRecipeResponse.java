@@ -1,7 +1,6 @@
 package com.ffc.ffc_be.model.dto.response;
 
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailMaterialDto;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

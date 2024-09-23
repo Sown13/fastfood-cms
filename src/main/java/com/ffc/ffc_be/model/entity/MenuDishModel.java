@@ -34,4 +34,7 @@ public class MenuDishModel extends BaseEntity {
 
     @Column(name = "category")//manual add
     private String category;
+
+    @Column(name = "activate")
+    private Boolean isActivate;
 }

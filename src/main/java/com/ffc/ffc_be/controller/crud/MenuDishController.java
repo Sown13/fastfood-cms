@@ -24,8 +24,9 @@ public class MenuDishController {
     )
     @GetMapping
     public ResponseEntity<ResponseDto<List<MenuDishModel>>> getMenuList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                                                        @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
-        return menuDishService.getAllMenuDishes(page, size);
+                                                                        @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                        @RequestParam(name = "activate", required = false) Boolean isActivate) {
+        return menuDishService.getAllMenuDishesByCondition(page, size, isActivate);
     }
 
     @Operation(summary = "Get menu detail",

@@ -36,7 +36,7 @@ public class MenuDishService {
     private final UserCmsInfoService userCmsInfoService;
     private final ModelMapper mapper;
 
-    public ResponseEntity<ResponseDto<List<MenuDishModel>>> getAllMenuDishes(Integer page, Integer size) {
+    public ResponseEntity<ResponseDto<List<MenuDishModel>>> getAllMenuDishesByCondition(Integer page, Integer size, Boolean isActivate) {
         try {
             if (page == null || page < 0) {
                 page = 0;
@@ -46,7 +46,16 @@ public class MenuDishService {
             }
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("category").descending());
-            Page<MenuDishModel> result = menuDishRepository.findAll(pageable);
+
+            Page<MenuDishModel> result;
+            if (isActivate == null) {
+                result = menuDishRepository.findAll(pageable);
+            } else if (isActivate) {
+                result = menuDishRepository.findAllByIsActivateTrue(pageable);
+            } else {
+                result = menuDishRepository.findAllByIsActivateFalse(pageable);
+            }
+
             List<MenuDishModel> response = result.getContent();
 
             MetaData metaData = MetaData.builder()
@@ -123,6 +132,7 @@ public class MenuDishService {
                     .price(request.getPrice())
                     .category(request.getCategory())
                     .createdBy(userCmsInfoModel.getId())
+                    .isActivate(true)
                     .build();
             menuDishCreated = menuDishRepository.save(newMenuDishModel);
         } catch (Exception e) {
