@@ -21,5 +21,7 @@ public class MenuDishRecipeResponse {
     private Integer cookTime;
     private Double price;
     private String category;
+    private Boolean isActive;
+    private Integer updatedBy;
     private List<MenuDishDetailMaterialDto> materialList;
 }
