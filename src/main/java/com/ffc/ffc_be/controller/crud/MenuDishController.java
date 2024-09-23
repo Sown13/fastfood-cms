@@ -2,7 +2,7 @@ package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
-import com.ffc.ffc_be.model.entity.MenuDishDetailModel;
+import com.ffc.ffc_be.model.dto.response.MenuDishRecipeResponse;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
 import com.ffc.ffc_be.service.MenuDishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,8 +32,8 @@ public class MenuDishController {
             description = "Get material list for a dish recipe"
     )
     @GetMapping("/{menuId}")
-    public ResponseEntity<ResponseDto<List<MenuDishDetailModel>>> getMenuDetailByMenuId(@PathVariable Integer menuId) {
-        return menuDishService.getMenuDetailMaterialsByMenuId(menuId);
+    public ResponseEntity<ResponseDto<MenuDishRecipeResponse>> getMenuRecipeByMenuId(@PathVariable Integer menuId) {
+        return menuDishService.getMenuRecipe(menuId);
     }
 
     @Operation(summary = "Create menu",
