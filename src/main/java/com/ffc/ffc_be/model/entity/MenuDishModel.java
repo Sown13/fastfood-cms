@@ -31,4 +31,7 @@ public class MenuDishModel extends BaseEntity {
 
     @Column(name = "price")//Count by VND
     private Double price;
+
+    @Column(name = "category")//manual add
+    private String category;
 }
