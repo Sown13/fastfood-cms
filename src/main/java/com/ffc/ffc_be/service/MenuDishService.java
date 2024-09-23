@@ -6,6 +6,7 @@ import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailDto;
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailMaterialDto;
 import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
+import com.ffc.ffc_be.model.dto.request.UpdateMenuDishRequest;
 import com.ffc.ffc_be.model.dto.response.MenuDishRecipeResponse;
 import com.ffc.ffc_be.model.entity.MenuDishDetailModel;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
@@ -176,5 +177,75 @@ public class MenuDishService {
         return ResponseBuilder.okResponse("Change menu active successfully!",
                 response,
                 StatusCodeEnum.STATUSCODE1001);
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseDto<Object>> updateMenuDish(Integer menuId, UpdateMenuDishRequest request) {
+        UserCmsInfoModel userCmsInfoModel;
+        try {
+            userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
+            if (userCmsInfoModel == null) {
+                log.info("Cannot get user info from context");
+
+                return ResponseBuilder.badRequestResponse("Wrong user cms info!",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error when get user info from context!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+        MenuDishModel targetMenuDish;
+        try {
+            targetMenuDish = menuDishRepository.findById(menuId).orElse(null);
+
+            if (targetMenuDish == null) {
+                return ResponseBuilder.badRequestResponse("menu id: " + menuId + " not found!",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Error when get menu dish info!, id: " + menuId,
+                    StatusCodeEnum.STATUSCODE2001);
+        }
+
+
+        Integer cookTime = request.getMenuDishDetailList().stream()
+                .mapToInt(MenuDishDetailDto::getPrepareTime)
+                .sum();
+
+//        targetMenuDish = mapper.map(request, MenuDishModel.class);
+        targetMenuDish.setName(request.getName());
+        targetMenuDish.setDescriptionPublic(request.getDescriptionPublic());
+        targetMenuDish.setDescriptionPrivate(request.getDescriptionPrivate());
+        targetMenuDish.setCookTime(cookTime);
+        targetMenuDish.setPrice(request.getPrice());
+        targetMenuDish.setCategory(request.getCategory());
+        targetMenuDish.setUpdatedBy(userCmsInfoModel.getId());
+        System.out.println(targetMenuDish);
+
+        try {
+            List<MenuDishDetailModel> targetMenuDishDetailList = menuDishDetailRepository.findAllByMenuDishId(menuId);
+            if (targetMenuDishDetailList.size() != request.getMenuDishDetailList().size()) {
+                return ResponseBuilder.badRequestResponse("Missing menu dish detail!",
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+
+            for (int i = 0; i < targetMenuDishDetailList.size(); i++) {
+                targetMenuDishDetailList.get(i).setMaterialId(request.getMenuDishDetailList().get(i).getMaterialId());
+                targetMenuDishDetailList.get(i).setQuantity(request.getMenuDishDetailList().get(i).getQuantity());
+                targetMenuDishDetailList.get(i).setNote(request.getMenuDishDetailList().get(i).getNote());
+                targetMenuDishDetailList.get(i).setPrepareTime(request.getMenuDishDetailList().get(i).getPrepareTime());
+            }
+
+            menuDishDetailRepository.saveAll(targetMenuDishDetailList);
+            System.out.println(targetMenuDish);
+            menuDishRepository.save(targetMenuDish);
+
+            return ResponseBuilder.okResponse("Update menu successfully!",
+                    StatusCodeEnum.STATUSCODE1001);
+        } catch (Exception e) {
+            return ResponseBuilder.badRequestResponse("Update menu successfully!",
+                    StatusCodeEnum.STATUSCODE2001);
+        }
     }
 }

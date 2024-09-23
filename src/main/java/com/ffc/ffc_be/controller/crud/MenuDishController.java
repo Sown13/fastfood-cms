@@ -2,6 +2,7 @@ package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
+import com.ffc.ffc_be.model.dto.request.UpdateMenuDishRequest;
 import com.ffc.ffc_be.model.dto.response.MenuDishRecipeResponse;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
 import com.ffc.ffc_be.service.MenuDishService;
@@ -48,8 +49,16 @@ public class MenuDishController {
     @Operation(summary = "Toggle menu active",
             description = "Change between true and false for the 'active' field"
     )
-    @PostMapping("/toggle/{menuId}")
+    @PatchMapping("/toggle/{menuId}")
     public ResponseEntity<ResponseDto<MenuDishModel>> toggleMenuActive(@PathVariable Integer menuId) {
         return menuDishService.toggleMenuDish(menuId);
+    }
+
+    @Operation(summary = "Update menu",
+            description = "Update menu dish (and recipe corresponding to that menu)"
+    )
+    @PatchMapping("/{menuId}")
+    public ResponseEntity<ResponseDto<Object>> updateMenuDish(@PathVariable Integer menuId, @Valid @RequestBody UpdateMenuDishRequest request) {
+        return menuDishService.updateMenuDish(menuId, request);
     }
 }
