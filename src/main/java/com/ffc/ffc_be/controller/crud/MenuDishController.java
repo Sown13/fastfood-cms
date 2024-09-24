@@ -1,8 +1,8 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
-import com.ffc.ffc_be.model.dto.request.UpdateMenuDishRequest;
+import com.ffc.ffc_be.model.dto.request.MenuDishCreateRequest;
+import com.ffc.ffc_be.model.dto.request.MenuDishUpdateRequest;
 import com.ffc.ffc_be.model.dto.response.MenuDishRecipeResponse;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
 import com.ffc.ffc_be.service.MenuDishService;
@@ -42,7 +42,7 @@ public class MenuDishController {
             description = "Create menu dish (and recipe corresponding to that menu)"
     )
     @PostMapping
-    public ResponseEntity<ResponseDto<Object>> createMenuDish(@Valid @RequestBody CreateMenuDishRequest request) {
+    public ResponseEntity<ResponseDto<Object>> createMenuDish(@Valid @RequestBody MenuDishCreateRequest request) {
         return menuDishService.createMenuDish(request);
     }
 
@@ -58,7 +58,7 @@ public class MenuDishController {
             description = "Update menu dish (and recipe corresponding to that menu)"
     )
     @PatchMapping("/{menuId}")
-    public ResponseEntity<ResponseDto<Object>> updateMenuDish(@PathVariable Integer menuId, @Valid @RequestBody UpdateMenuDishRequest request) {
+    public ResponseEntity<ResponseDto<Object>> updateMenuDish(@PathVariable Integer menuId, @Valid @RequestBody MenuDishUpdateRequest request) {
         return menuDishService.updateMenuDish(menuId, request);
     }
 }

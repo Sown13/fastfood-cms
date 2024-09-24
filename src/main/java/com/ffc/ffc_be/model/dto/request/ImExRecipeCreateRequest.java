@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImExCreateRequest {
+public class ImExRecipeCreateRequest {
     private Integer responsibleBy;
     private String description;
     private RepTypeEnum repType;

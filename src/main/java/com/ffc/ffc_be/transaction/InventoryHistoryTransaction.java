@@ -1,6 +1,6 @@
 package com.ffc.ffc_be.transaction;
 
-import com.ffc.ffc_be.model.dto.request.CreateInventoryHistoryRequest;
+import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
 import com.ffc.ffc_be.model.entity.InventoryHistoryDetailModel;
 import com.ffc.ffc_be.model.entity.InventoryHistoryModel;
 import com.ffc.ffc_be.model.entity.InventoryModel;
@@ -31,7 +31,7 @@ public class InventoryHistoryTransaction {
     private final ModelMapper mapper;
 
     @Transactional
-    public boolean createInventoryHistory(CreateInventoryHistoryRequest request) {
+    public boolean createInventoryHistory(InventoryHistoryCreateRequest request) {
         UserCmsInfoModel userCmsInfoModel = null;
         if (request.getIsManualClosing()) {
             try {

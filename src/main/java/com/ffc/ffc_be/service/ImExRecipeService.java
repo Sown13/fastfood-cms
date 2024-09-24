@@ -4,7 +4,7 @@ import com.ffc.ffc_be.model.builder.MetaData;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.puredto.ImExRecipeDetailDto;
-import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
+import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeDetailResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeResponse;
@@ -39,7 +39,7 @@ public class ImExRecipeService {
     private final IUserInfoRepository userInfoRepository;
     private final ModelMapper mapper;
 
-    public ResponseEntity<ResponseDto<Object>> createImEx(ImExCreateRequest request) {
+    public ResponseEntity<ResponseDto<Object>> createImEx(ImExRecipeCreateRequest request) {
         try {
             List<ImExDetailModel> resultList = imExTransaction.createNewImExRecipe(request);
             if (resultList == null || resultList.isEmpty()) {

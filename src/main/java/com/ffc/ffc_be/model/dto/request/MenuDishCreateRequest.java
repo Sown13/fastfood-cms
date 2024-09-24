@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateMenuDishRequest {
+public class MenuDishCreateRequest {
     @Size(min = 1, max = 500)
     @NotBlank
     private String name;

@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.request.CreateInventoryHistoryRequest;
+import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryDetailResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
@@ -33,7 +33,7 @@ public class InventoryController {
     @Operation(summary = "Closing inventory (create inventory history)",
             description = "Closing inventory, isManualClosing = true"
     )
-    public ResponseEntity<ResponseDto<Object>> manualClosingInventory(@RequestBody @Valid CreateInventoryHistoryRequest request) {
+    public ResponseEntity<ResponseDto<Object>> manualClosingInventory(@RequestBody @Valid InventoryHistoryCreateRequest request) {
         return inventoryService.createInventoryHistory(request);
     }
 
