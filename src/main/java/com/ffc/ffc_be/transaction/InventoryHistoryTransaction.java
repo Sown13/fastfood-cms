@@ -82,6 +82,7 @@ public class InventoryHistoryTransaction {
         List<InventoryHistoryDetailModel> inventoryHistoryDetailModelList = new ArrayList<>();
         for (InventoryModel inventoryModel : currentInventory) {
             InventoryHistoryDetailModel detailHistory = mapper.map(inventoryModel, InventoryHistoryDetailModel.class);
+            detailHistory.setId(null);//since mapper also map id from inventoryModel so need to clear it or it will be update instead of insert
             detailHistory.setInventoryHistoryId(savedInventoryHistoryModel.getId());
             detailHistory.setNote("Auto created when closing inventory");
             inventoryHistoryDetailModelList.add(detailHistory);
