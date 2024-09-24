@@ -5,8 +5,8 @@ import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailDto;
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailMaterialDto;
-import com.ffc.ffc_be.model.dto.request.CreateMenuDishRequest;
-import com.ffc.ffc_be.model.dto.request.UpdateMenuDishRequest;
+import com.ffc.ffc_be.model.dto.request.MenuDishCreateRequest;
+import com.ffc.ffc_be.model.dto.request.MenuDishUpdateRequest;
 import com.ffc.ffc_be.model.dto.response.MenuDishRecipeResponse;
 import com.ffc.ffc_be.model.entity.MenuDishDetailModel;
 import com.ffc.ffc_be.model.entity.MenuDishModel;
@@ -104,7 +104,7 @@ public class MenuDishService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseDto<Object>> createMenuDish(CreateMenuDishRequest request) {
+    public ResponseEntity<ResponseDto<Object>> createMenuDish(MenuDishCreateRequest request) {
         UserCmsInfoModel userCmsInfoModel;
         try {
             userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
@@ -180,7 +180,7 @@ public class MenuDishService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseDto<Object>> updateMenuDish(Integer menuId, UpdateMenuDishRequest request) {
+    public ResponseEntity<ResponseDto<Object>> updateMenuDish(Integer menuId, MenuDishUpdateRequest request) {
         UserCmsInfoModel userCmsInfoModel;
         try {
             userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();

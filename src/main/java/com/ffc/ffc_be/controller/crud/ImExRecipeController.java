@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
+import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeDetailResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeResponse;
@@ -44,8 +44,8 @@ public class ImExRecipeController {
     @Operation(summary = "Create new import or export recipe",
             description = "repType = IMPORT or EXPORT"
     )
-    @PostMapping("/im-ex")
-    public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody @Valid ImExCreateRequest request) {
+    @PostMapping
+    public ResponseEntity<ResponseDto<Object>> createImExRecipe(@RequestBody @Valid ImExRecipeCreateRequest request) {
         return imExRecipeService.createImEx(request);
     }
 

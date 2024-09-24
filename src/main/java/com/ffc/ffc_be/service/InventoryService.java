@@ -3,10 +3,12 @@ package com.ffc.ffc_be.service;
 import com.ffc.ffc_be.model.builder.MetaData;
 import com.ffc.ffc_be.model.builder.ResponseBuilder;
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.request.CreateInventoryHistoryRequest;
+import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
+import com.ffc.ffc_be.model.dto.response.InventoryHistoryDetailResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
 import com.ffc.ffc_be.model.entity.InventoryHistoryDetailModel;
+import com.ffc.ffc_be.model.entity.InventoryHistoryModel;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IInventoryHistoryDetailRepository;
 import com.ffc.ffc_be.repository.IInventoryHistoryRepository;
@@ -70,7 +72,7 @@ public class InventoryService {
         return null;
     }
 
-    public ResponseEntity<ResponseDto<Object>> createInventoryHistory(CreateInventoryHistoryRequest request) {
+    public ResponseEntity<ResponseDto<Object>> createInventoryHistory(InventoryHistoryCreateRequest request) {
         try {
             if (inventoryHistoryTransaction.createInventoryHistory(request)) {
                 return ResponseBuilder.okResponse("Closing Inventory successfully!",
@@ -89,7 +91,7 @@ public class InventoryService {
     @Scheduled(cron = "0 17 16 * * ?")
     private void autoCloseInventoryAtTheEndOfTheDayIfNotManualClosingOnThatDay() {
         String description = "Auto close inventory at the end of the day " + LocalDate.now().minusDays(1);
-        CreateInventoryHistoryRequest request = new CreateInventoryHistoryRequest(description, false);
+        InventoryHistoryCreateRequest request = new InventoryHistoryCreateRequest(description, false);
         try {
             inventoryHistoryTransaction.createInventoryHistory(request);
 
@@ -130,7 +132,7 @@ public class InventoryService {
         }
     }
 
-    public ResponseEntity<ResponseDto<List<InventoryHistoryDetailModel>>> getInventoryHistoryListDetail(Integer inventoryHistoryId, Integer page, Integer size) {
+    public ResponseEntity<ResponseDto<InventoryHistoryDetailResponse>> getInventoryHistoryListDetail(Integer inventoryHistoryId, Integer page, Integer size) {
         if (inventoryHistoryId == null || inventoryHistoryId < 0) {
             return ResponseBuilder.badRequestResponse("Inventory history id invalid!",
                     StatusCodeEnum.STATUSCODE2001);
@@ -147,6 +149,19 @@ public class InventoryService {
         try {
             Page<InventoryHistoryDetailModel> result = inventoryHistoryDetailRepository.findInventoryHistoryDetailModelsByInventoryHistoryId(inventoryHistoryId, pageable);
             List<InventoryHistoryDetailModel> inventoryHistoryDetailList = result.getContent();
+            InventoryHistoryModel inventoryHistoryModel = inventoryHistoryRepository.findById(inventoryHistoryId).orElse(null);
+            if (inventoryHistoryModel == null) {
+                return ResponseBuilder.badRequestResponse("Inventory history not found! id: " + inventoryHistoryId,
+                        StatusCodeEnum.STATUSCODE2001);
+            }
+
+            InventoryHistoryDetailResponse response = InventoryHistoryDetailResponse.builder()
+                    .name(inventoryHistoryModel.getName())
+                    .description(inventoryHistoryModel.getDescription())
+                    .reportedDate(inventoryHistoryModel.getReportedDate())
+                    .reportedBy(inventoryHistoryModel.getReportedBy())
+                    .inventoryHistoryDetailList(inventoryHistoryDetailList)
+                    .build();
 
             MetaData metaData = MetaData.builder()
                     .currentPage(page)
@@ -156,7 +171,7 @@ public class InventoryService {
                     .build();
 
             return ResponseBuilder.okResponse("Get inventory history detail list successfully!",
-                    inventoryHistoryDetailList,
+                    response,
                     StatusCodeEnum.STATUSCODE1001,
                     metaData
             );

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateInventoryHistoryRequest {
+public class InventoryHistoryCreateRequest {
     private String description;
 
     @IsValidClosingInventoryType

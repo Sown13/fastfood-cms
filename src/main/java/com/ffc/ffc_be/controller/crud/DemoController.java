@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.controller.crud;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
-import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
+import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeResponse;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
@@ -39,7 +39,7 @@ public class DemoController {
     }
 
     @PostMapping("/im-ex")
-    public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody @Valid ImExCreateRequest request) {
+    public ResponseEntity<ResponseDto<Object>> demoImEx(@RequestBody @Valid ImExRecipeCreateRequest request) {
         return imExRecipeService.createImEx(request);
     }
 

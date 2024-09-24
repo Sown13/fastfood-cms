@@ -1,7 +1,7 @@
 package com.ffc.ffc_be.transaction;
 
 import com.ffc.ffc_be.model.dto.puredto.ImExDetailDto;
-import com.ffc.ffc_be.model.dto.request.ImExCreateRequest;
+import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.entity.ImExRecipeModel;
 import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
@@ -29,7 +29,7 @@ public class ImExTransaction {
     private final UserCmsInfoService userCmsInfoService;
 
     @Transactional(rollbackFor = Exception.class)
-    public List<ImExDetailModel> createNewImExRecipe(ImExCreateRequest request) {
+    public List<ImExDetailModel> createNewImExRecipe(ImExRecipeCreateRequest request) {
         UserCmsInfoModel userCmsInfoModel;
         try {
             userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
