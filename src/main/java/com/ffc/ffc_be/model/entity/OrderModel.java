@@ -23,4 +23,10 @@ public class OrderModel extends BaseEntity {
 
     @Column(name = "status")
     private OrderStatusEnum status;
+
+    @Column(name = "order_by")
+    private Integer orderBy;
+
+    @Column(name = "order_by_name")
+    private String orderByName;
 }

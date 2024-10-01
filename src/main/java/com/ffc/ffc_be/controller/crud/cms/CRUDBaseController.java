@@ -1,10 +1,9 @@
-package com.ffc.ffc_be.controller.crud;
+package com.ffc.ffc_be.controller.crud.cms;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.service.CRUDBaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

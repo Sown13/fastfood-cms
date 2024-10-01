@@ -1,4 +1,4 @@
-package com.ffc.ffc_be.controller.crud;
+package com.ffc.ffc_be.controller.crud.cms;
 
 import com.ffc.ffc_be.model.builder.ResponseDto;
 import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
