@@ -2,9 +2,7 @@ package com.ffc.ffc_be.model.entity;
 
 import com.ffc.ffc_be.model.base.BaseEntity;
 import com.ffc.ffc_be.model.enums.OrderStatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
@@ -22,6 +20,7 @@ public class OrderModel extends BaseEntity {
     private String promotionCode;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
 
     @Column(name = "order_by")
