@@ -3,6 +3,7 @@ package com.ffc.ffc_be.repository;
 import com.ffc.ffc_be.model.dto.puredto.MenuDishDetailMaterialDto;
 import com.ffc.ffc_be.model.dto.puredto.OrderDetailDto;
 import com.ffc.ffc_be.model.entity.OrderModel;
+import com.ffc.ffc_be.model.enums.OrderStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,6 @@ public interface IOrderRepository extends JpaRepository<OrderModel, Integer> {
             "JOIN MenuDishModel md ON odm.menuId = md.id " +
             "WHERE odm.orderId = :orderId")
     List<OrderDetailDto> findOrderDetailListByOrderId(Integer orderId);
+
+    List<OrderModel> findAllByStatus(OrderStatusEnum status);
 }

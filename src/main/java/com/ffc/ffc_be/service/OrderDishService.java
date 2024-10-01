@@ -37,8 +37,14 @@ public class OrderDishService {
     private final IMenuDishDetailRepository menuDishDetailRepository;
     // todo need refactor this service later
 
-    public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders() {
-        List<OrderModel> response = orderRepository.findAll();
+    public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders(OrderStatusEnum status) {
+        List<OrderModel> response;
+        if (status == null) {
+            response = orderRepository.findAll();
+        } else {
+            response = orderRepository.findAllByStatus(status);
+        }
+
         return ResponseBuilder.okResponse("Get order list successfully",
                 response,
                 StatusCodeEnum.STATUSCODE1001);
@@ -179,9 +185,13 @@ public class OrderDishService {
             List<OrderDetailDto> orderDetailList = orderRepository.findOrderDetailListByOrderId(orderId);
 
             List<MenuDishDetailMaterialDto> materialList = new ArrayList<>();
-
+            List<Integer> quantity = new ArrayList<>();
             for (OrderDetailDto detailDto : orderDetailList) {
                 List<MenuDishDetailMaterialDto> result = menuDishDetailRepository.findRecipeMaterialByMenuId(detailDto.getMenuId());
+                for (int i = 0; i < result.size(); i++) {
+                    quantity.add(detailDto.getQuantity());
+                }
+
                 materialList.addAll(result);
             }
 
@@ -197,7 +207,7 @@ public class OrderDishService {
             for (int i = 0; i < materialList.size(); i++) {
                 ImExDetailDto imExDetailDto = ImExDetailDto.builder()
                         .materialId(materialList.get(i).getMaterialId())
-                        .quantity(materialList.get(i).getQuantity() * orderDetailList.get(i).getQuantity())
+                        .quantity(materialList.get(i).getQuantity() * quantity.get(i))
                         .note("User for cooking for order " + orderId)
                         .totalValue(1d)//todo need to calculate original price for this
                         .build();

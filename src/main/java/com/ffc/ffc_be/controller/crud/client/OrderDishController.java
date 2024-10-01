@@ -19,8 +19,8 @@ public class OrderDishController {
     private final OrderDishService orderService;
 
     @GetMapping
-    public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders(@RequestParam(required = false) OrderStatusEnum status) {
+        return orderService.getAllOrders(status);
     }
 
     @GetMapping("/{id}")
@@ -38,9 +38,5 @@ public class OrderDishController {
         return orderService.deleteOrder(id);
     }
 
-    @PostMapping("/{id}/status")
-    public ResponseEntity<ResponseDto<Object>> updateOrderStatus(@PathVariable Integer id,
-                                                                 @RequestBody OrderStatusEnum status) {
-        return orderService.updateOrderStatus(id, status);
-    }
+
 }
