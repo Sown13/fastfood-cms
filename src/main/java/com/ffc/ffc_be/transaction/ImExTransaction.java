@@ -96,6 +96,7 @@ public class ImExTransaction {
                             .build();
                     imExDetailList.add(model);
 
+                    //Accountant
                     AccountAssetModel assetModel = AccountAssetModel.builder()
                             .amount(importDto.getTotalValue())
                             .accountNumber("111")
@@ -111,6 +112,7 @@ public class ImExTransaction {
                             .calculateType(AccountCalculateType.DECREASE)
                             .build();
                     accountEquityModelList.add(equityModel);
+                    //////////////////
                 }
             } else {
                 for (ImExDetailDto exportDto : request.getDetailList()) {

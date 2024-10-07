@@ -8,12 +8,10 @@ import com.ffc.ffc_be.model.dto.response.InventoryHistoryDetailResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
 import com.ffc.ffc_be.model.entity.*;
+import com.ffc.ffc_be.model.enums.AccountCalculateType;
 import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
-import com.ffc.ffc_be.repository.IImExDetailRepository;
-import com.ffc.ffc_be.repository.IInventoryHistoryDetailRepository;
-import com.ffc.ffc_be.repository.IInventoryHistoryRepository;
-import com.ffc.ffc_be.repository.IInventoryRepository;
+import com.ffc.ffc_be.repository.*;
 import com.ffc.ffc_be.transaction.InventoryHistoryTransaction;
 import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +42,7 @@ public class InventoryService {
     private final IInventoryHistoryDetailRepository inventoryHistoryDetailRepository;
     private final ModelMapper mapper;
     private final IImExDetailRepository imExDetailRepository;
+    private final IAccountEquityRepository accountEquityRepository;
 
     public ResponseEntity<ResponseDto<List<InventoryResponse>>> getCurrentInventory(Integer page, Integer size) {
         try {
@@ -240,7 +239,14 @@ public class InventoryService {
             List<ImExDetailModel> solvedExport = new ArrayList<>();
 
             // ghi nhan chi phi tk 641
-            List<AccountEquityModel> accountEquityModelList = new ArrayList<>();
+            AccountEquityModel accountEquityModel = AccountEquityModel.builder()
+                    .accountNumber("641")
+                    .calculateType(AccountCalculateType.INCREASE)
+                    .description("Recognizing costs when goods are issued from inventory")
+                    .amount(0d)
+                    .build();
+
+            double accumulatedCost = 0d;
 
             ImExDetailModel currentExportDetail;
             ImExDetailModel headImportDetail = null;
@@ -258,21 +264,43 @@ public class InventoryService {
                 int difference = currentExportDetail.getQuantity() - headImportDetail.getQuantityLeftInQueue();
 
                 while (difference > 0) {
+
+                    //accountant
+                    double valuePerUnit = headImportDetail.getValuePerUnit();
+                    int totalUnit = headImportDetail.getQuantityLeftInQueue();
+                    accumulatedCost += valuePerUnit * totalUnit;
+                    ///
+
                     outQueueImport = headImportDetail;
                     outQueueImport.setQuantityLeftInQueue(0);
                     outQueueImport.setQueueStatus(QueueStatus.DONE);
+
                     solvedImport.add(outQueueImport);
 
                     headImportDetail = importQueue.poll();
                     headImportDetail.setQueueStatus(QueueStatus.HEAD);
 
-                    difference = difference - headImportDetail.getQuantity();
+                    difference = difference - headImportDetail.getQuantityLeftInQueue();//todo need double check
                 }
 
                 if (difference < 0) {
+
+                    //accountant
+                    double valuePerUnit = headImportDetail.getValuePerUnit();
+                    int totalUnit = headImportDetail.getQuantityLeftInQueue() + difference;
+                    accumulatedCost += valuePerUnit * totalUnit;
+                    ///
+
                     int quantityLeftInQueue = -1 * difference;
                     headImportDetail.setQuantityLeftInQueue(quantityLeftInQueue);
                 } else {
+
+                    //accountant
+                    double valuePerUnit = headImportDetail.getValuePerUnit();
+                    int totalUnit = headImportDetail.getQuantityLeftInQueue();
+                    accumulatedCost += valuePerUnit * totalUnit;
+                    ///
+
                     outQueueImport = headImportDetail;
                     outQueueImport.setQuantityLeftInQueue(0);
                     outQueueImport.setQueueStatus(QueueStatus.DONE);
@@ -286,10 +314,15 @@ public class InventoryService {
                 solvedExport.add(outQueueExport);
             }
 
+            //Accountant
+            accountEquityModel.setAmount(accumulatedCost);
+            //
+
             if (headImportDetail != null) {
                 solvedImport.add(headImportDetail);
             }
 
+            accountEquityRepository.save(accountEquityModel);
             imExDetailRepository.saveAll(solvedImport);
             imExDetailRepository.saveAll(solvedExport);
 

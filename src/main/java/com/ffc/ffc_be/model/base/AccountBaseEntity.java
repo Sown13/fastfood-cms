@@ -16,12 +16,6 @@ public class AccountBaseEntity extends BaseEntity{
     @Column(name = "account_name")
     private String name;
 
-    @Column(name = "account_number")
-    private Integer accountNumber;
-
-    @Column(name = "amount")
-    private Double amount;
-
     @Column(name = "created_by")
     private Integer createdBy;
 }
