@@ -14,6 +14,7 @@ import com.ffc.ffc_be.model.enums.*;
 import com.ffc.ffc_be.repository.*;
 import com.ffc.ffc_be.transaction.ImExTransaction;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +37,9 @@ public class OrderDishService {
     public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders(OrderStatusEnum status) {
         List<OrderModel> response;
         if (status == null) {
-            response = orderRepository.findAll();
+            response = orderRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
         } else {
-            response = orderRepository.findAllByStatus(status);
+            response = orderRepository.findAllByStatus(status,Sort.by(Sort.Direction.ASC, "createdAt"));
         }
 
         return ResponseBuilder.okResponse("Get order list successfully",
