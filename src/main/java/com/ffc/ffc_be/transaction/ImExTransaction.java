@@ -8,9 +8,7 @@ import com.ffc.ffc_be.model.entity.InventoryModel;
 import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
 import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
-import com.ffc.ffc_be.repository.IImExDetailRepository;
-import com.ffc.ffc_be.repository.IImExRecipeRepository;
-import com.ffc.ffc_be.repository.IInventoryRepository;
+import com.ffc.ffc_be.repository.*;
 import com.ffc.ffc_be.service.UserCmsInfoService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -29,6 +27,8 @@ public class ImExTransaction {
     private final IImExRecipeRepository imExRecipeRepository;
     private final IInventoryRepository inventoryRepository;
     private final UserCmsInfoService userCmsInfoService;
+    private final IAccountAssetRepository accountAssetRepository;
+    private final IAccountEquityRepository accountEquityRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public List<ImExDetailModel> createNewImExRecipe(ImExRecipeCreateRequest request) {
@@ -72,7 +72,7 @@ public class ImExTransaction {
                     InventoryModel currentInventory = inventoryRepository.findByMaterialId(importDto.getMaterialId()).orElse(null);
                     if (currentInventory == null) {
                         throw new RuntimeException("Inventory not found");
-                    } else if (currentInventory.getQuantity() > 0){
+                    } else if (currentInventory.getQuantity() > 0) {
                         status = QueueStatus.ENQUEUE;
                     } else {
                         status = QueueStatus.HEAD;
