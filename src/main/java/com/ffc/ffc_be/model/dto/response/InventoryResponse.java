@@ -24,4 +24,22 @@ public class InventoryResponse {
     private String description;
     private String note;
     private Boolean deprecated;
+
+    private Boolean isExpiredSoon;
+    private Integer lifeLeft;
+
+    public InventoryResponse(Integer id, LocalDateTime createdAt, LocalDateTime updatedAt, Integer materialId, String name, String code, Integer quantity, String unitType, Integer shelfLife, String description, String note, Boolean deprecated) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.materialId = materialId;
+        this.name = name;
+        this.code = code;
+        this.quantity = quantity;
+        this.unitType = unitType;
+        this.shelfLife = shelfLife;
+        this.description = description;
+        this.note = note;
+        this.deprecated = deprecated;
+    }
 }

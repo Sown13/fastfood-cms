@@ -3,6 +3,7 @@ package com.ffc.ffc_be.repository;
 import com.ffc.ffc_be.model.dto.puredto.ImExRecipeDetailDto;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
+import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IImExDetailRepository extends JpaRepository<ImExDetailModel, Integer> {
@@ -60,4 +62,6 @@ public interface IImExDetailRepository extends JpaRepository<ImExDetailModel, In
             " ORDER BY created_at ASC",
             nativeQuery = true)
     List<ImExDetailModel> findExportListForQueue(Integer materialId);
+
+    Optional<ImExDetailModel> findImExDetailModelByQueueStatusAndMaterialId(QueueStatus queueStatus, Integer materialId);
 }

@@ -30,6 +30,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +59,28 @@ public class InventoryService {
             Pageable pageable = PageRequest.of(page, size);
             Page<InventoryResponse> result = inventoryRepository.getNewestInventory(pageable);
             List<InventoryResponse> response = result.getContent();
+
+            for (InventoryResponse inventoryResponse : response) {
+                ImExDetailModel model = imExDetailRepository.findImExDetailModelByQueueStatusAndMaterialId(QueueStatus.HEAD, inventoryResponse.getMaterialId()).orElse(null);
+                int daysBetweenInteger = -1;
+                double timeLeftPercentage = 100;
+                int lifeLeft = -1;
+                if (model != null) {
+                    long daysBetweenLong = ChronoUnit.DAYS.between(model.getFactoryDate(), LocalDateTime.now());
+                    daysBetweenInteger = (int) daysBetweenLong;
+
+                    lifeLeft = inventoryResponse.getShelfLife() - daysBetweenInteger;
+                    timeLeftPercentage = (lifeLeft / inventoryResponse.getShelfLife()) * 100;
+                }
+
+                if (timeLeftPercentage < 33.3) {
+                    inventoryResponse.setIsExpiredSoon(true);
+                } else {
+                    inventoryResponse.setIsExpiredSoon(false);
+                }
+
+                inventoryResponse.setLifeLeft(lifeLeft);
+            }
 
             MetaData metaData = MetaData.builder()
                     .currentPage(page)
