@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-info")
+@RequestMapping("/employee")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('BOSS', 'MANAGER')")
 public class EmployeeController {
