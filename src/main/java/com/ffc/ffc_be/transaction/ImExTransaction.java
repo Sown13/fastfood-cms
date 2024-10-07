@@ -107,7 +107,7 @@ public class ImExTransaction {
 
                     AccountEquityModel equityModel = AccountEquityModel.builder()
                             .amount(importDto.getTotalValue())
-                            .accountNumber("641")
+                            .accountNumber("411")
                             .description("Import material")
                             .calculateType(AccountCalculateType.DECREASE)
                             .build();
