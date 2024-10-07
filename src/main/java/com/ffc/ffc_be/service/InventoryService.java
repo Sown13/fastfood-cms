@@ -7,9 +7,13 @@ import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryDetailResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
+import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.entity.InventoryHistoryDetailModel;
 import com.ffc.ffc_be.model.entity.InventoryHistoryModel;
+import com.ffc.ffc_be.model.entity.InventoryModel;
+import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
+import com.ffc.ffc_be.repository.IImExDetailRepository;
 import com.ffc.ffc_be.repository.IInventoryHistoryDetailRepository;
 import com.ffc.ffc_be.repository.IInventoryHistoryRepository;
 import com.ffc.ffc_be.repository.IInventoryRepository;
@@ -26,7 +30,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +44,7 @@ public class InventoryService {
     private final IInventoryHistoryRepository inventoryHistoryRepository;
     private final IInventoryHistoryDetailRepository inventoryHistoryDetailRepository;
     private final ModelMapper mapper;
+    private final IImExDetailRepository imExDetailRepository;
 
     public ResponseEntity<ResponseDto<List<InventoryResponse>>> getCurrentInventory(Integer page, Integer size) {
         try {
@@ -178,6 +186,88 @@ public class InventoryService {
         } catch (Exception e) {
             return ResponseBuilder.badRequestResponse("Error happen when get inventory history detail list",
                     StatusCodeEnum.STATUSCODE2001);
+        }
+    }
+
+    protected void calculateQueue() {
+        try {
+            List<InventoryModel> inventoryList = inventoryRepository.findAll();
+
+            for (InventoryModel dto : inventoryList) {
+
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void calculateQueueForOneMaterial(Integer materialId) {
+        try {
+            List<ImExDetailModel> importDetailList = imExDetailRepository.findImportListForQueue(materialId);
+            ImExDetailModel head = importDetailList.remove(importDetailList.size() - 1);
+            importDetailList.addFirst(head);
+            Queue<ImExDetailModel> importQueue = new LinkedList<>(importDetailList);
+
+            List<ImExDetailModel> exportDetailList = imExDetailRepository.findExportListForQueue(materialId);
+            Queue<ImExDetailModel> exportQueue = new LinkedList<>(exportDetailList);
+
+            List<ImExDetailModel> solvedImport = new ArrayList<>();
+            List<ImExDetailModel> solvedExport = new ArrayList<>();
+
+            ImExDetailModel currentExportDetail;
+            ImExDetailModel headImportDetail = null;
+            ImExDetailModel outQueueImport;
+            ImExDetailModel outQueueExport;
+            while (!exportQueue.isEmpty()) {
+                // as long as there still export then 100% still have import left (since not allow minus inventory)
+                currentExportDetail = exportQueue.poll();
+
+                // checking if there is already an import head in queue or not
+                if (headImportDetail == null) {
+                    headImportDetail = importQueue.poll();
+                }
+
+                int difference = currentExportDetail.getQuantity() - headImportDetail.getQuantityLeftInQueue();
+
+                while (difference > 0) {
+                    outQueueImport = headImportDetail;
+                    outQueueImport.setQuantityLeftInQueue(0);
+                    outQueueImport.setQueueStatus(QueueStatus.DONE);
+                    solvedImport.add(outQueueImport);
+
+                    headImportDetail = importQueue.poll();
+                    headImportDetail.setQueueStatus(QueueStatus.HEAD);
+
+                    difference = difference - headImportDetail.getQuantity();
+                }
+
+                if (difference < 0) {
+                    int quantityLeftInQueue = -1 * difference;
+                    headImportDetail.setQuantityLeftInQueue(quantityLeftInQueue);
+                } else {
+                    outQueueImport = headImportDetail;
+                    outQueueImport.setQuantityLeftInQueue(0);
+                    outQueueImport.setQueueStatus(QueueStatus.DONE);
+                    solvedImport.add(outQueueImport);
+
+                    headImportDetail = null;
+                }
+
+                outQueueExport = currentExportDetail;
+                outQueueExport.setQueueStatus(QueueStatus.DONE);
+                solvedExport.add(outQueueExport);
+            }
+
+            if (headImportDetail != null) {
+                solvedImport.add(headImportDetail);
+            }
+
+            imExDetailRepository.saveAll(solvedImport);
+            imExDetailRepository.saveAll(solvedExport);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

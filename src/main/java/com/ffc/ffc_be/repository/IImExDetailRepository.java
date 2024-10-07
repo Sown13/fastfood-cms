@@ -48,4 +48,16 @@ public interface IImExDetailRepository extends JpaRepository<ImExDetailModel, In
             "JOIN ImExRecipeModel ier ON ied.recipeId = ier.id " +
             "WHERE ied.recipeId = :recipeId")
     List<ImExRecipeDetailDto> getImExRecipeDetailByRecipeId(Integer recipeId);
+
+    @Query(value = "SELECT * FROM fastfood_cms.import_export_detail" +
+            " WHERE material_id = ?1 AND type = 'IMPORT' AND queue_status IN ('HEAD', 'ENQUEUE')" +
+            " ORDER BY queue_status, factory_date  ASC ",
+            nativeQuery = true)
+    List<ImExDetailModel> findImportListForQueue(Integer materialId);
+
+    @Query(value = "SELECT * FROM fastfood_cms.import_export_detail" +
+            " WHERE material_id = ?1 AND type = 'EXPORT' AND queue_status IS NULL" +
+            " ORDER BY created_at ASC",
+            nativeQuery = true)
+    List<ImExDetailModel> findExportListForQueue(Integer materialId);
 }

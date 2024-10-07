@@ -208,7 +208,7 @@ public class OrderDishService {
                 ImExDetailDto imExDetailDto = ImExDetailDto.builder()
                         .materialId(materialList.get(i).getMaterialId())
                         .quantity(materialList.get(i).getQuantity() * quantity.get(i))
-                        .note("User for cooking for order " + orderId)
+                        .note("Use for cooking for order " + orderId)
                         .totalValue(1d)//todo need to calculate original price for this
                         .build();
                 listImExDetail.add(imExDetailDto);

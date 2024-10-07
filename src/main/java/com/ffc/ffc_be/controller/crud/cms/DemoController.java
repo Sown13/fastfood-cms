@@ -49,4 +49,9 @@ public class DemoController {
                                                                                        @RequestParam(name = "repType", required = true, defaultValue = "IMPORT") RepTypeEnum repType) {
         return imExRecipeService.getImExDetailHistoryList(page, size, repType);
     }
+
+    @GetMapping("/test")
+    public void demoListQueue() {
+        inventoryService.calculateQueueForOneMaterial(1);
+    }
 }

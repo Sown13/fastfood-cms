@@ -8,13 +8,12 @@ import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.dto.response.ImExDetailHistoryResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeDetailResponse;
 import com.ffc.ffc_be.model.dto.response.ImExRecipeResponse;
-import com.ffc.ffc_be.model.entity.ImExDetailModel;
-import com.ffc.ffc_be.model.entity.ImExRecipeModel;
-import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.model.entity.*;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IImExDetailRepository;
 import com.ffc.ffc_be.repository.IImExRecipeRepository;
+import com.ffc.ffc_be.repository.IInventoryRepository;
 import com.ffc.ffc_be.repository.IUserInfoRepository;
 import com.ffc.ffc_be.transaction.ImExTransaction;
 import lombok.CustomLog;
@@ -38,6 +37,7 @@ public class ImExRecipeService {
     private final IImExRecipeRepository imExRecipeRepository;
     private final IUserInfoRepository userInfoRepository;
     private final ModelMapper mapper;
+    private final IInventoryRepository inventoryRepository;
 
     public ResponseEntity<ResponseDto<Object>> createImEx(ImExRecipeCreateRequest request) {
         try {

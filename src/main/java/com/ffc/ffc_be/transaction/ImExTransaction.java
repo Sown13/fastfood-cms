@@ -4,7 +4,9 @@ import com.ffc.ffc_be.model.dto.puredto.ImExDetailDto;
 import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.entity.ImExDetailModel;
 import com.ffc.ffc_be.model.entity.ImExRecipeModel;
+import com.ffc.ffc_be.model.entity.InventoryModel;
 import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import com.ffc.ffc_be.repository.IImExDetailRepository;
 import com.ffc.ffc_be.repository.IImExRecipeRepository;
@@ -62,19 +64,52 @@ public class ImExTransaction {
         List<ImExDetailModel> imExList;
         try {
             List<ImExDetailModel> imExDetailList = new ArrayList<>();
-            for (ImExDetailDto dto : request.getDetailList()) {
-                double valuePerUnit = dto.getTotalValue() / dto.getQuantity();
-                ImExDetailModel model = ImExDetailModel.builder()
-                        .recipeId(resultImExRecipe.getId())
-                        .materialId(dto.getMaterialId())
-                        .quantity(dto.getQuantity())
-                        .factoryDate(dto.getFactoryDate())
-                        .note(dto.getNote())
-                        .totalValue(dto.getTotalValue())
-                        .valuePerUnit(valuePerUnit)
-                        .supplier(request.getSupplier())
-                        .build();
-                imExDetailList.add(model);
+            if (request.getRepType().equals(RepTypeEnum.IMPORT)) {
+                for (ImExDetailDto importDto : request.getDetailList()) {
+                    double valuePerUnit = importDto.getTotalValue() / importDto.getQuantity();
+
+                    QueueStatus status;
+                    InventoryModel currentInventory = inventoryRepository.findByMaterialId(importDto.getMaterialId()).orElse(null);
+                    if (currentInventory == null) {
+                        throw new RuntimeException("Inventory not found");
+                    } else if (currentInventory.getQuantity() > 0){
+                        status = QueueStatus.ENQUEUE;
+                    } else {
+                        status = QueueStatus.HEAD;
+                    }
+
+                    ImExDetailModel model = ImExDetailModel.builder()
+                            .recipeId(resultImExRecipe.getId())
+                            .materialId(importDto.getMaterialId())
+                            .quantity(importDto.getQuantity())
+                            .factoryDate(importDto.getFactoryDate())
+                            .note(importDto.getNote())
+                            .totalValue(importDto.getTotalValue())
+                            .valuePerUnit(valuePerUnit)
+                            .supplier(request.getSupplier())
+                            .queueStatus(status)
+                            .quantityLeftInQueue(importDto.getQuantity())
+                            .type(RepTypeEnum.IMPORT)
+                            .build();
+                    imExDetailList.add(model);
+                }
+            } else {
+                for (ImExDetailDto exportDto : request.getDetailList()) {
+                    double valuePerUnit = exportDto.getTotalValue() / exportDto.getQuantity();
+                    ImExDetailModel model = ImExDetailModel.builder()
+                            .recipeId(resultImExRecipe.getId())
+                            .materialId(exportDto.getMaterialId())
+                            .quantity(exportDto.getQuantity())
+                            .factoryDate(exportDto.getFactoryDate())
+                            .note(exportDto.getNote())
+                            .totalValue(exportDto.getTotalValue())
+                            .valuePerUnit(valuePerUnit)
+                            .supplier(request.getSupplier())
+                            .importDetailId(exportDto.getImportTargetId())
+                            .type(RepTypeEnum.EXPORT)
+                            .build();
+                    imExDetailList.add(model);
+                }
             }
 
             imExList = imExDetailRepository.saveAll(imExDetailList);

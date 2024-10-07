@@ -1,9 +1,9 @@
 package com.ffc.ffc_be.model.entity;
 
 import com.ffc.ffc_be.model.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.ffc.ffc_be.model.enums.QueueStatus;
+import com.ffc.ffc_be.model.enums.RepTypeEnum;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -39,4 +39,18 @@ public class ImExDetailModel extends BaseEntity {
 
     @Column(name = "supplier") // supplier if it is import and buyer if it is export
     private String supplier;
+
+    @Column(name = "queue_status")
+    @Enumerated(EnumType.STRING)
+    private QueueStatus queueStatus;
+
+    @Column(name = "quantity_left_in_queue")
+    private Integer quantityLeftInQueue;
+
+    @Column(name = "import_detail_id")
+    private Integer importDetailId;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private RepTypeEnum type;
 }

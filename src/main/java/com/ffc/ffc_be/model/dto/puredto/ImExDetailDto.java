@@ -22,4 +22,6 @@ public class ImExDetailDto {
     private LocalDateTime factoryDate;
     private String note;
     private Double totalValue;
+
+    private Integer importTargetId;
 }
