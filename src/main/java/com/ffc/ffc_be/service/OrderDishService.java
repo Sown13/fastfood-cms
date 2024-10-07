@@ -68,8 +68,8 @@ public class OrderDishService {
                     .description(orderModel.getDescription())
                     .promotionCode(orderModel.getPromotionCode())
                     .status(orderModel.getStatus())
-                    .orderBy(orderModel.getOrderBy())
                     .orderByName(orderModel.getOrderByName())
+                    .address(orderModel.getAddress())
                     .totalPrice(totalPrice)
                     .orderDetaiList(orderDetailList)
                     .build();
@@ -85,15 +85,15 @@ public class OrderDishService {
 
     public ResponseEntity<ResponseDto<Object>> createOrder(OrderCreateRequest request) {
         try {
-            UserCmsInfoModel userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
-            if (userCmsInfoModel == null) {
-                return ResponseBuilder.badRequestResponse("Request Failed! Cannot get user info from context",
-                        StatusCodeEnum.STATUSCODE2001);
-            }
+//            UserCmsInfoModel userCmsInfoModel = userCmsInfoService.getUserInfoFromContext();
+//            if (userCmsInfoModel == null) {
+//                return ResponseBuilder.badRequestResponse("Request Failed! Cannot get user info from context",
+//                        StatusCodeEnum.STATUSCODE2001);
+//            }
 
             OrderModel newOrder = OrderModel.builder()
-                    .orderBy(userCmsInfoModel.getId())
-                    .orderByName(userCmsInfoModel.getFullName())
+                    .address(request.getAddress())
+                    .orderByName(request.getFullName())
                     .description(request.getDescription())
                     .promotionCode(request.getPromotionCode())
                     .status(request.getStatus())

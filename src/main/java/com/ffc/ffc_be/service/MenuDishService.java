@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @CustomLog
@@ -36,6 +37,14 @@ public class MenuDishService {
     private final IMenuDishDetailRepository menuDishDetailRepository;
     private final UserCmsInfoService userCmsInfoService;
     private final ModelMapper mapper;
+
+
+    private String[] randomImage = {"/images/pizza.jpg", "/images/burger.jpg",
+            "/images/sushi.jpg", "/images/cake.jpg",
+            "/images/kfc.jpg", "/images/bread.jpg",
+            "/images/rice.jpg", "/images/burger.jpg",
+            "/images/banhbao.jpg", "/images/trungchien.jpg",
+            "/images/thitkhotau.jpg"};
 
     public ResponseEntity<ResponseDto<List<MenuDishModel>>> getAllMenuDishesByCondition(Integer page, Integer size, Boolean isActivate) {
         try {
@@ -125,6 +134,12 @@ public class MenuDishService {
                     .mapToInt(MenuDishDetailDto::getPrepareTime)
                     .sum();
 
+            String image = request.getImage();
+            if (image == null) {
+                int randomIndex = new Random().nextInt(randomImage.length);
+                image = randomImage[randomIndex];
+            }
+
             MenuDishModel newMenuDishModel = MenuDishModel.builder()
                     .name(request.getName())
                     .descriptionPublic(request.getDescriptionPublic())
@@ -133,8 +148,10 @@ public class MenuDishService {
                     .price(request.getPrice())
                     .category(request.getCategory())
                     .createdBy(userCmsInfoModel.getId())
+                    .image(image)
                     .isActive(true)
                     .build();
+
             menuDishCreated = menuDishRepository.save(newMenuDishModel);
         } catch (Exception e) {
             return ResponseBuilder.badRequestResponse("Error when get create menu dish!",

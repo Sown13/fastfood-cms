@@ -40,4 +40,7 @@ public class MenuDishModel extends BaseEntity {
 
     @Column(name = "updated_by")
     private Integer updatedBy;
+
+    @Column(name = "image")
+    private String image;
 }

@@ -32,4 +32,6 @@ public class MenuDishCreateRequest {
 
     @Valid
     private List<MenuDishDetailDto> menuDishDetailList;
+
+    private String image;
 }

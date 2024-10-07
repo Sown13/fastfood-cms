@@ -17,8 +17,8 @@ public class OrderDetailResponse {
     private String description;
     private String promotionCode;
     private OrderStatusEnum status;
-    private Integer orderBy;
     private String orderByName;
     private List<OrderDetailDto> orderDetaiList;
     private Double totalPrice;
+    private String address;
 }

@@ -19,4 +19,7 @@ public class OrderCreateRequest {
 
     @Valid
     private List<OrderDetailCreateDto> detailList;
+
+    private String fullName;
+    private String address;
 }

@@ -23,9 +23,12 @@ public class OrderModel extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
 
-    @Column(name = "order_by")
-    private Integer orderBy;
+//    @Column(name = "order_by")
+//    private Integer orderBy;
 
     @Column(name = "order_by_name")
     private String orderByName;
+
+    @Column(name = "address")
+    private String address;
 }

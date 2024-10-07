@@ -25,4 +25,5 @@ public class MaterialResponse extends BaseResponse {
     private String description;
     private Integer createdBy;
     private Integer updatedBy;
+    private String image;
 }
