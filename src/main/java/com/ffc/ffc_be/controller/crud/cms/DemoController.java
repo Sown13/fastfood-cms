@@ -52,6 +52,6 @@ public class DemoController {
 
     @GetMapping("/test")
     public void demoListQueue() {
-        inventoryService.calculateQueueForOneMaterial(1);
+        inventoryService.calculateQueue();
     }
 }

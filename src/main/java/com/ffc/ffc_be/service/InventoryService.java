@@ -83,6 +83,8 @@ public class InventoryService {
     public ResponseEntity<ResponseDto<Object>> createInventoryHistory(InventoryHistoryCreateRequest request) {
         try {
             if (inventoryHistoryTransaction.createInventoryHistory(request)) {
+                calculateQueue();
+
                 return ResponseBuilder.okResponse("Closing Inventory successfully!",
                         StatusCodeEnum.STATUSCODE1001);
             }
@@ -102,6 +104,7 @@ public class InventoryService {
         InventoryHistoryCreateRequest request = new InventoryHistoryCreateRequest(description, false);
         try {
             inventoryHistoryTransaction.createInventoryHistory(request);
+            calculateQueue();
 
             String logMessage = description + " Successfully!";
             log.info(logMessage);
@@ -189,16 +192,16 @@ public class InventoryService {
         }
     }
 
-    protected void calculateQueue() {
+    public void calculateQueue() {
         try {
             List<InventoryModel> inventoryList = inventoryRepository.findAll();
 
             for (InventoryModel dto : inventoryList) {
-
+                calculateQueueForOneMaterial(dto.getMaterialId());
             }
 
         } catch (Exception e) {
-
+            throw e;
         }
     }
 
@@ -267,7 +270,7 @@ public class InventoryService {
             imExDetailRepository.saveAll(solvedExport);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 }
