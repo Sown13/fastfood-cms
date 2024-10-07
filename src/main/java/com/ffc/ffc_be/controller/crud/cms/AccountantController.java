@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountantController {
     private final AccountantService accountantService;
 
-    @GetMapping("/test")
+    @GetMapping
     public ResponseEntity<ResponseDto<AccountantReportResponse>> getBusinessReport() {
         return accountantService.getAccountantReport();
     }
