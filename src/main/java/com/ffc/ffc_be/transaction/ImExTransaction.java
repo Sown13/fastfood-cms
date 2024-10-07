@@ -97,26 +97,29 @@ public class ImExTransaction {
                     imExDetailList.add(model);
 
                     //Accountant
-                    AccountAssetModel assetModel = AccountAssetModel.builder()
+                    AccountAssetModel assetModelInventory = AccountAssetModel.builder()
                             .amount(importDto.getTotalValue())
                             .accountNumber("111")
-                            .description("Import material")
+                            .description("Import material, increase inventory")
                             .calculateType(AccountCalculateType.INCREASE)
                             .build();
-                    accountAssetModelList.add(assetModel);
+                    accountAssetModelList.add(assetModelInventory);
 
-                    AccountEquityModel equityModel = AccountEquityModel.builder()
+                    AccountAssetModel assetModelMoney = AccountAssetModel.builder()
                             .amount(importDto.getTotalValue())
-                            .accountNumber("411")
-                            .description("Import material")
+                            .accountNumber("111")
+                            .description("Import material, decrease money")
                             .calculateType(AccountCalculateType.DECREASE)
                             .build();
-                    accountEquityModelList.add(equityModel);
+                    accountAssetModelList.add(assetModelMoney);
                     //////////////////
                 }
             } else {
                 for (ImExDetailDto exportDto : request.getDetailList()) {
-                    double valuePerUnit = exportDto.getTotalValue() / exportDto.getQuantity();
+                    double valuePerUnit = 0; //just lazy to validate
+                    if (exportDto.getQuantity() > 0) {
+                        valuePerUnit = exportDto.getTotalValue() / exportDto.getQuantity();
+                    }
                     ImExDetailModel model = ImExDetailModel.builder()
                             .recipeId(resultImExRecipe.getId())
                             .materialId(exportDto.getMaterialId())

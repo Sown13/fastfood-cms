@@ -9,16 +9,9 @@ import com.ffc.ffc_be.model.dto.puredto.OrderDetailDto;
 import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
 import com.ffc.ffc_be.model.dto.request.OrderCreateRequest;
 import com.ffc.ffc_be.model.dto.response.OrderDetailResponse;
-import com.ffc.ffc_be.model.entity.OrderDetailModel;
-import com.ffc.ffc_be.model.entity.OrderModel;
-import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
-import com.ffc.ffc_be.model.enums.OrderStatusEnum;
-import com.ffc.ffc_be.model.enums.PurposeEnum;
-import com.ffc.ffc_be.model.enums.RepTypeEnum;
-import com.ffc.ffc_be.model.enums.StatusCodeEnum;
-import com.ffc.ffc_be.repository.IMenuDishDetailRepository;
-import com.ffc.ffc_be.repository.IOderDetailRepository;
-import com.ffc.ffc_be.repository.IOrderRepository;
+import com.ffc.ffc_be.model.entity.*;
+import com.ffc.ffc_be.model.enums.*;
+import com.ffc.ffc_be.repository.*;
 import com.ffc.ffc_be.transaction.ImExTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +29,9 @@ public class OrderDishService {
     private final ImExTransaction imExTransaction;
     private final IMenuDishDetailRepository menuDishDetailRepository;
     // todo need refactor this service later
+
+    private final IAccountEquityRepository accountEquityRepository;
+    private final IAccountAssetRepository accountAssetRepository;
 
     public ResponseEntity<ResponseDto<List<OrderModel>>> getAllOrders(OrderStatusEnum status) {
         List<OrderModel> response;
@@ -186,18 +182,27 @@ public class OrderDishService {
 
             List<MenuDishDetailMaterialDto> materialList = new ArrayList<>();
             List<Integer> quantity = new ArrayList<>();
+
+            //Accountant
+            double accumulatedPrice = 0;
+            //
+
             for (OrderDetailDto detailDto : orderDetailList) {
                 List<MenuDishDetailMaterialDto> result = menuDishDetailRepository.findRecipeMaterialByMenuId(detailDto.getMenuId());
                 for (int i = 0; i < result.size(); i++) {
                     quantity.add(detailDto.getQuantity());
                 }
 
+                //Accountant
+                accumulatedPrice += detailDto.getMenuPrice();
+                //
+
                 materialList.addAll(result);
             }
 
             ImExRecipeCreateRequest request = ImExRecipeCreateRequest.builder()
                     .responsibleBy(userId)
-                    .description("Use for order dish (bussiness)")
+                    .description("Use for order dish (business)")
                     .repType(RepTypeEnum.EXPORT)
                     .purpose(PurposeEnum.BUSINESS)
                     .supplier(order.getOrderByName())
@@ -209,7 +214,7 @@ public class OrderDishService {
                         .materialId(materialList.get(i).getMaterialId())
                         .quantity(materialList.get(i).getQuantity() * quantity.get(i))
                         .note("Use for cooking for order " + orderId)
-                        .totalValue(1d)//todo need to calculate original price for this
+                        .totalValue(0d)//todo need to calculate original price for this
                         .build();
                 listImExDetail.add(imExDetailDto);
             }
@@ -218,6 +223,23 @@ public class OrderDishService {
 
             try {
                 imExTransaction.createNewImExRecipe(request);
+
+                AccountEquityModel accountEquityModel = AccountEquityModel.builder()
+                        .accountNumber("511")
+                        .calculateType(AccountCalculateType.INCREASE)
+                        .description("Recognizing benefit when completed an order")
+                        .amount(accumulatedPrice)
+                        .build();
+
+                AccountAssetModel accountAssetModel = AccountAssetModel.builder()
+                        .accountNumber("111")
+                        .calculateType(AccountCalculateType.INCREASE)
+                        .description("Receive money when completed an order")
+                        .amount(accumulatedPrice)
+                        .build();
+
+                accountEquityRepository.save(accountEquityModel);
+                accountAssetRepository.save(accountAssetModel);
             } catch (Exception e) {
                 return "Not enough material to cook this dish";
             }
