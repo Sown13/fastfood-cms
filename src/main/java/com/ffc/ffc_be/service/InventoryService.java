@@ -7,10 +7,7 @@ import com.ffc.ffc_be.model.dto.request.InventoryHistoryCreateRequest;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryDetailResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryHistoryListResponse;
 import com.ffc.ffc_be.model.dto.response.InventoryResponse;
-import com.ffc.ffc_be.model.entity.ImExDetailModel;
-import com.ffc.ffc_be.model.entity.InventoryHistoryDetailModel;
-import com.ffc.ffc_be.model.entity.InventoryHistoryModel;
-import com.ffc.ffc_be.model.entity.InventoryModel;
+import com.ffc.ffc_be.model.entity.*;
 import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.StatusCodeEnum;
 import com.ffc.ffc_be.repository.IImExDetailRepository;
@@ -241,6 +238,9 @@ public class InventoryService {
 
             List<ImExDetailModel> solvedImport = new ArrayList<>();
             List<ImExDetailModel> solvedExport = new ArrayList<>();
+
+            // ghi nhan chi phi tk 641
+            List<AccountEquityModel> accountEquityModelList = new ArrayList<>();
 
             ImExDetailModel currentExportDetail;
             ImExDetailModel headImportDetail = null;

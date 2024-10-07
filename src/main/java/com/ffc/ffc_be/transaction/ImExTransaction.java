@@ -2,10 +2,8 @@ package com.ffc.ffc_be.transaction;
 
 import com.ffc.ffc_be.model.dto.puredto.ImExDetailDto;
 import com.ffc.ffc_be.model.dto.request.ImExRecipeCreateRequest;
-import com.ffc.ffc_be.model.entity.ImExDetailModel;
-import com.ffc.ffc_be.model.entity.ImExRecipeModel;
-import com.ffc.ffc_be.model.entity.InventoryModel;
-import com.ffc.ffc_be.model.entity.UserCmsInfoModel;
+import com.ffc.ffc_be.model.entity.*;
+import com.ffc.ffc_be.model.enums.AccountCalculateType;
 import com.ffc.ffc_be.model.enums.QueueStatus;
 import com.ffc.ffc_be.model.enums.RepTypeEnum;
 import com.ffc.ffc_be.repository.*;
@@ -62,7 +60,12 @@ public class ImExTransaction {
         }
 
         List<ImExDetailModel> imExList;
+        List<AccountAssetModel> accountAssetModelList; // add accountant calculate
+        List<AccountEquityModel> accountEquityModelList;
         try {
+            accountAssetModelList = new ArrayList<>();
+            accountEquityModelList = new ArrayList<>();
+
             List<ImExDetailModel> imExDetailList = new ArrayList<>();
             if (request.getRepType().equals(RepTypeEnum.IMPORT)) {
                 for (ImExDetailDto importDto : request.getDetailList()) {
@@ -92,6 +95,22 @@ public class ImExTransaction {
                             .type(RepTypeEnum.IMPORT)
                             .build();
                     imExDetailList.add(model);
+
+                    AccountAssetModel assetModel = AccountAssetModel.builder()
+                            .amount(importDto.getTotalValue())
+                            .accountNumber("111")
+                            .description("Import material")
+                            .calculateType(AccountCalculateType.INCREASE)
+                            .build();
+                    accountAssetModelList.add(assetModel);
+
+                    AccountEquityModel equityModel = AccountEquityModel.builder()
+                            .amount(importDto.getTotalValue())
+                            .accountNumber("641")
+                            .description("Import material")
+                            .calculateType(AccountCalculateType.DECREASE)
+                            .build();
+                    accountEquityModelList.add(equityModel);
                 }
             } else {
                 for (ImExDetailDto exportDto : request.getDetailList()) {
@@ -112,6 +131,8 @@ public class ImExTransaction {
                 }
             }
 
+            accountAssetRepository.saveAll(accountAssetModelList);
+            accountEquityRepository.saveAll(accountEquityModelList);
             imExList = imExDetailRepository.saveAll(imExDetailList);
         } catch (Exception e) {
             log.error("Error when create new im ex detail", e);

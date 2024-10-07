@@ -1,9 +1,8 @@
 package com.ffc.ffc_be.model.entity;
 
 import com.ffc.ffc_be.model.base.AccountBaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.ffc.ffc_be.model.enums.AccountCalculateType;
+import jakarta.persistence.*;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
@@ -23,4 +22,8 @@ public class AccountAssetModel extends AccountBaseEntity {
     // tk tai san:111
     @Column(name = "account_number")
     private String accountNumber;
+
+    @Column(name = "calculate_type")
+    @Enumerated(EnumType.STRING)
+    private AccountCalculateType calculateType;
 }
