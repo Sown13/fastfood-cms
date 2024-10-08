@@ -5,6 +5,7 @@ import com.ffc.ffc_be.model.dto.response.AccountantReportResponse;
 import com.ffc.ffc_be.service.AccountantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/accountant")
+@PreAuthorize("hasAnyRole('BOSS', 'MANAGER', 'ACCOUNTANT')")
 public class AccountantController {
     private final AccountantService accountantService;
 

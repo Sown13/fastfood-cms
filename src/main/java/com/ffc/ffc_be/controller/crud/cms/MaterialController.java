@@ -8,6 +8,7 @@ import com.ffc.ffc_be.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class MaterialController {
             description = "Get detail by id"
     )
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS', 'MANAGER')")
     public ResponseEntity<ResponseDto<MaterialResponse>> getById(@PathVariable Integer id) {
         return materialService.getDetail(id);
     }
@@ -30,6 +32,7 @@ public class MaterialController {
             description = "Get all, get metaData in response, page start from 0, default page =0, size = 10"
     )
     @GetMapping
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS', 'MANAGER')")
     public ResponseEntity<ResponseDto<List<MaterialResponse>>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                       @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         return materialService.getAll(page, size);
@@ -39,6 +42,7 @@ public class MaterialController {
             description = "Create new"
     )
     @PostMapping
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<MaterialResponse>> create(@RequestBody MaterialCreateRequest request) {
         return materialService.create(request);
     }
@@ -47,6 +51,7 @@ public class MaterialController {
             description = "Update material by id (update whole material), need send both old and new info to update"
     )
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<MaterialResponse>> update(@PathVariable Integer id, @RequestBody MaterialUpdateRequest request) {
         return materialService.update(request, id);
     }
@@ -55,6 +60,7 @@ public class MaterialController {
             description = "Delete material by id, set deprecated = true instead of hard delete"
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<Object>> delete(@PathVariable Integer id) {
         return materialService.delete(id);
     }

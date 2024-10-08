@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class MenuDishController {
             description = "Get material list for a dish recipe"
     )
     @GetMapping("/{menuId}")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS', 'MANAGER', 'KITCHEN')")
     public ResponseEntity<ResponseDto<MenuDishRecipeResponse>> getMenuRecipeByMenuId(@PathVariable Integer menuId) {
         return menuDishService.getMenuRecipe(menuId);
     }
@@ -42,6 +44,7 @@ public class MenuDishController {
             description = "Create menu dish (and recipe corresponding to that menu)"
     )
     @PostMapping
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS', 'MANAGER', 'KITCHEN')")
     public ResponseEntity<ResponseDto<Object>> createMenuDish(@Valid @RequestBody MenuDishCreateRequest request) {
         return menuDishService.createMenuDish(request);
     }
@@ -50,6 +53,7 @@ public class MenuDishController {
             description = "Change between true and false for the 'active' field"
     )
     @PatchMapping("/toggle/{menuId}")
+    @PreAuthorize("hasAnyRole('BOSS', 'MANAGER', 'KITCHEN')")
     public ResponseEntity<ResponseDto<MenuDishModel>> toggleMenuActive(@PathVariable Integer menuId) {
         return menuDishService.toggleMenuDish(menuId);
     }
@@ -58,6 +62,7 @@ public class MenuDishController {
             description = "Update menu dish (and recipe corresponding to that menu)"
     )
     @PatchMapping("/{menuId}")
+    @PreAuthorize("hasAnyRole('BOSS', 'MANAGER', 'KITCHEN')")
     public ResponseEntity<ResponseDto<Object>> updateMenuDish(@PathVariable Integer menuId, @Valid @RequestBody MenuDishUpdateRequest request) {
         return menuDishService.updateMenuDish(menuId, request);
     }

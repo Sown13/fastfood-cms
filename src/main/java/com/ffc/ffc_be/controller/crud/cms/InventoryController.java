@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class InventoryController {
     @Operation(summary = "Get newest inventory info, start from page 0",
             description = "Get all, get metaData in response, page start from 0, default page =0, size = 10"
     )
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS','MANAGER', 'KITCHEN')")
     public ResponseEntity<ResponseDto<List<InventoryResponse>>> getInventory(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                              @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         return inventoryService.getCurrentInventory(page, size);
@@ -33,6 +35,7 @@ public class InventoryController {
     @Operation(summary = "Closing inventory (create inventory history)",
             description = "Closing inventory, isManualClosing = true"
     )
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<Object>> manualClosingInventory(@RequestBody @Valid InventoryHistoryCreateRequest request) {
         return inventoryService.createInventoryHistory(request);
     }
@@ -41,6 +44,7 @@ public class InventoryController {
     @Operation(summary = "Get inventory history list, start from page 0",
             description = "Get all, get metaData in response, page start from 0, default page =0, size = 10"
     )
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<List<InventoryHistoryListResponse>>> getInventoryHistoryList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                                                    @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         return inventoryService.getInventoryHistoryList(page, size);
@@ -50,6 +54,7 @@ public class InventoryController {
     @Operation(summary = "Get inventory history detail list by history id",
             description = "Get all, get metaData in response, page start from 0, default page =0, size = 10"
     )
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<InventoryHistoryDetailResponse>> getInventoryHistoryDetailListByHistoryId(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
                                                                                                                 @PathVariable Integer inventoryHistoryId) {

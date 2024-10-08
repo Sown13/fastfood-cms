@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ImExRecipeController {
             description = "Default order by newest, default page = 0, size = 10"
     )
     @GetMapping
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<List<ImExRecipeResponse>>> getImExRecipeList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                                    @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
                                                                                    @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
@@ -35,6 +37,7 @@ public class ImExRecipeController {
             description = "Default order by newest, default page = 0, size = 10"
     )
     @GetMapping("/detail-list")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<List<ImExDetailHistoryResponse>>> getImExDetailHistoryList(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
                                                                                                  @RequestParam(name = "repType", defaultValue = "IMPORT") RepTypeEnum repType) {
@@ -45,6 +48,7 @@ public class ImExRecipeController {
             description = "repType = IMPORT or EXPORT"
     )
     @PostMapping
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<Object>> createImExRecipe(@RequestBody @Valid ImExRecipeCreateRequest request) {
         return imExRecipeService.createImEx(request);
     }
@@ -53,6 +57,7 @@ public class ImExRecipeController {
             description = "Default order by newest, default page = 0, size = 10"
     )
     @GetMapping("/{recipeId}")
+    @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<ImExRecipeDetailResponse>> getImExRecipeDetail(@PathVariable Integer recipeId) {
         return imExRecipeService.getImExRecipeDetail(recipeId);
     }
