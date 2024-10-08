@@ -24,8 +24,15 @@ public interface IInventoryRepository extends JpaRepository<InventoryModel, Inte
         int offset = pageable.getPageNumber() * limit;
 
         List<InventoryResponse> content = getNewestInventoryWithPagination(limit, offset);
-        return new PageImpl<>(content, pageable, content.size());
+
+        // Fetch the total count of records
+        long total = countTotalInventory();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     Optional<InventoryModel> findByMaterialId(Integer materialId);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM inventory")
+    long countTotalInventory();
 }

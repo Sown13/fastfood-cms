@@ -173,7 +173,7 @@ public class InventoryService {
             page = 0;
         }
         if (size == null || size < 1) {
-            size = 10;
+            size = 100;
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 

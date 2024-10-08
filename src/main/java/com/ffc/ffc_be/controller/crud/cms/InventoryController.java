@@ -56,7 +56,7 @@ public class InventoryController {
     )
     @PreAuthorize("hasAnyRole('ACCOUNTANT', 'BOSS')")
     public ResponseEntity<ResponseDto<InventoryHistoryDetailResponse>> getInventoryHistoryDetailListByHistoryId(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                                                                                                @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                                                                @RequestParam(name = "size", required = false, defaultValue = "100") Integer size,
                                                                                                                 @PathVariable Integer inventoryHistoryId) {
         return inventoryService.getInventoryHistoryListDetail(inventoryHistoryId, page, size);
     }
