@@ -66,7 +66,7 @@ public class InventoryService {
                     daysBetweenInteger = (int) daysBetweenLong;
 
                     lifeLeft = inventoryResponse.getShelfLife() - daysBetweenInteger;
-                    timeLeftPercentage = (lifeLeft / inventoryResponse.getShelfLife()) * 100;
+                    timeLeftPercentage = (double) lifeLeft / (double) inventoryResponse.getShelfLife() * 100;
                 }
 
                 if (timeLeftPercentage < 33.3) {
